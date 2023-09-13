@@ -1,0 +1,92 @@
+<div class="grid">
+	<div class="col-12">
+	<p-panel header="Desgination List">
+		<ng-template pTemplate="icons">
+			<div class="flex btn">
+				<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"  (click)="openNew()" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editDesgination(selectedDesignation)" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteProduct(selectedDesignation)" style="margin-right: 10px;"></button>
+			</div>
+		</ng-template>
+		<div class="card">
+			<p-table #myTable [value]="designationList"
+				dataKey="id" 
+				[rows]="10" 
+				[rowHover]="true" 		
+				[paginator]="true" 
+				responsiveLayout="scroll"
+				[showCurrentPageReport]="true"
+				currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+				[globalFilterFields]="['designationId','designationName']"
+				dataKey="designationId"
+				selectionMode="single" [(selection)]="selectedDesignation">
+
+				<ng-template pTemplate="caption">
+					<div style="text-align: right">
+						<span class="p-input-icon-left">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" value="Search" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem" pSortableColumn="designationId">
+							<div class="flex justify-content-between align-items-center">
+								DesignationId
+								<p-sortIcon field="designationId"></p-sortIcon>
+							</div>
+						</th>
+						<th style="min-width: 12rem" pSortableColumn="designationName">
+							<div class="flex justify-content-between align-items-center">
+								DesignationName
+								<p-sortIcon field="designationName"></p-sortIcon>	
+							</div>
+						</th>	
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-designations>
+					<tr [pSelectableRow]="designations">
+						<td>
+							{{designations.designationId}}
+						</td>
+						
+						<td>
+							{{designations.designationName }}
+						</td>
+						
+					</tr>
+				</ng-template>
+
+    		</p-table>	
+			<p-dialog [(visible)]="designationDialog" [style]="{width: '450px'}" header="Desgination Details" [modal]="true" class="p-fluid">
+				<form [formGroup]="designationForm" (ngSubmit)="saveDesignation()">
+					<div class="field">
+						<h4>Desgination Name</h4>
+						<input id="designationName"  pInputText type="text" formControlName="designationName" [ngClass]="{ 'ng-invalid ng-dirty':!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched}">
+
+						<div class="text-danger"  *ngIf="!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched">Please Enter DesignationName</div>
+					</div>
+						<button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+						<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>
+				</form>
+			</p-dialog>
+			
+			<p-dialog [(visible)]="deleteDesginationDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+				<div class="flex align-items-center justify-content-center">
+					<i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+					<span *ngIf="selectedDesignation">Are you sure you want to delete <b>{{selectedDesignation.designationName}}</b>?</span>
+				</div>
+				<ng-template pTemplate="footer">
+					<button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteDesginationDialog = false"></button>
+					<button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+				</ng-template>
+			</p-dialog>
+
+		</div>
+	</p-panel>
+	</div>
+</div>
+	
+
