@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { DesignationService } from 'src/app/demo/service/designation.service';
 import { Idesignation } from 'src/app/idesignation';
 
 @Component({
-  selector: 'app-desgination-list',
-  templateUrl: './desgination-list.component.html',
-  styleUrls: ['./desgination-list.component.css']
+  selector: 'app-designation',
+  templateUrl: './designation.component.html',
+  styleUrls: ['./designation.component.css'],
+  providers: [MessageService]
 })
-export class DesginationListComponent implements OnInit {
+export class DesignationComponent implements OnInit {
 
   designationList!: Idesignation[];
   designationDialog: boolean = false;
@@ -17,7 +19,7 @@ export class DesginationListComponent implements OnInit {
   designationForm! : FormGroup;
   selectedDesignation!: Idesignation ;
 
-  constructor(private designationService: DesignationService, private fb : FormBuilder) { }
+  constructor(private designationService: DesignationService, private fb : FormBuilder, private messageService: MessageService) { }
 
   ngOnInit() {
       this.designationService.GetDesignation().subscribe(data => {
@@ -50,29 +52,38 @@ export class DesginationListComponent implements OnInit {
 
   editDesgination(selectedDesignation : Idesignation)
   {
-    this.designationDialog = true;
-    this.fetchTableData(selectedDesignation.designationId);
+    this.messageService.add({ severity: 'info', summary: 'Please select data you want to change',life: 10000 });
+    if(this.selectedDesignation)
+    {
+      this.designationDialog = true;
+      this.selectedDesignation = selectedDesignation;
+      this.fetchTableData(selectedDesignation.designationId);
+    } 
   }
 
   deleteProduct(selectedDesignation : Idesignation) {
-    this.deleteDesginationDialog = true;
-    console.log(selectedDesignation.designationId);
+    this.messageService.add({ severity: 'info', summary: 'Please select data you want to delete',life: 1000});
+    if(this.selectedDesignation)
+    {
+      this.deleteDesginationDialog = true;
+      console.log(selectedDesignation.designationId);
+    }
   }
 
   saveDesignation() {
     console.log(this.designationForm);
-    debugger
     if(this.selectedDesignation && this.selectedDesignation.designationId)
     {
+      // debugger
       this.designationService.UpdateDesignation(this.designationForm.value).subscribe()
-      this.designationDialog = false; 
-      console.log("update");
+      this.messageService.add({ severity: 'success', summary: 'Successfuly Updated'});
     }
     else
     {
-      this.designationService.InsertDesignation(this.designationForm.value).subscribe()
-      this.designationDialog = false;  
+      this.designationService.InsertDesignation(this.designationForm.value).subscribe();
+      this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
     } 
+    this.designationDialog = false;  
 
     // const isUpdate = this.selectedDesignation && this.selectedDesignation.designationId;
     // const formData = { ...this.designationForm.value };
@@ -87,8 +98,26 @@ export class DesginationListComponent implements OnInit {
     // });
   }
 
-  confirmDelete() {
-    this.designationService.DeleteDesignation(this.selectedDesignation.designationId).subscribe();
+  // updateDesgination()
+  // {
+  //   debugger;
+  //   this.designationService.UpdateDesignation(this.designationForm.value).subscribe();
+  //   this.designationDialog = false; 
+  //  console.log( this.designationForm.value) 
+  // }
+
+  confirmDelete(desgination : Idesignation) {
+    this.designationService.DeleteDesignation(desgination.designationId).subscribe();
+    this.designationList = this.designationList.filter(item => item.designationId !== desgination.designationId);
+    this.messageService.add({ severity: 'success', summary: 'Successfuly Deleted'});
     this.deleteDesginationDialog = false;
 }
+
+  // updateLocalData(updatedItem: Idesignation) {
+  //   const index = this.designationList.findIndex(item => item.designationId === updatedItem.designationId);
+  //   if (index !== -1) {
+  //     this.designationList[index] = updatedItem;
+  //   }
+// }
 }
+ 

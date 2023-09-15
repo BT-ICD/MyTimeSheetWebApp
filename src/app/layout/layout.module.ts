@@ -5,8 +5,8 @@ import { MenuitemComponent } from './menuitem/menuitem.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { LayoutComponent } from './layout/layout.component';
 import { TopbarComponent } from './topbar/topbar.component';
-
-
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -14,10 +14,14 @@ import { TopbarComponent } from './topbar/topbar.component';
     MenuitemComponent,
     SidebarComponent,
     LayoutComponent,
-    TopbarComponent
+    TopbarComponent,
+    
+    
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule,
+    HttpClientModule
   ]
 })
 export class LayoutModule { }

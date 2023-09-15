@@ -12,6 +12,7 @@ export class MenuComponent  implements OnInit {
   constructor() { }
 
   ngOnInit() {
+   
       this.model = [
           {
               label: 'Home',
@@ -22,11 +23,8 @@ export class MenuComponent  implements OnInit {
           {
               label: 'UI Components',
               items: [
-                
-                  { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-                  { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-                  
-                
+                  { label: 'Designation List', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/designationList'] },
+                   
               ]
           },
         

@@ -1,5 +1,6 @@
 <div class="grid">
 	<div class="col-12">
+        <p-toast></p-toast>
 	<p-panel header="Desgination List">
 		<ng-template pTemplate="icons">
 			<div class="flex btn">
@@ -25,7 +26,7 @@
 					<div style="text-align: right">
 						<span class="p-input-icon-left">
 							<i class="pi pi-search"></i>
-							<input pInputText type="text" value="Search" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
+							<input pInputText type="text"  placeholder="Global Filter" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
 						</span>
 					</div>
 				</ng-template>
@@ -44,6 +45,20 @@
 							</div>
 						</th>	
 					</tr>
+					<tr>
+						<th>
+							<span class="p-input-icon-left"> 
+								<i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'designationId','startsWith')"style="width: 10rem"/>
+							</span>
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'designationName', 'startsWith')"style="width: 10rem"/>
+							</span>
+							
+						</th>
+						</tr>
 				</ng-template>
 
 				<ng-template pTemplate="body" let-designations>
@@ -68,8 +83,17 @@
 
 						<div class="text-danger"  *ngIf="!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched">Please Enter DesignationName</div>
 					</div>
-						<button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-						<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>
+                    <div class="flex gap-8">
+                        <div class="ml-4">
+							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>	
+                        </div>
+                        <div class="ml-4">
+                        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                        </div>
+                </div>
+                            <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>						 -->
+                   
 				</form>
 			</p-dialog>
 			
@@ -80,13 +104,16 @@
 				</div>
 				<ng-template pTemplate="footer">
 					<button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteDesginationDialog = false"></button>
-					<button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+					<button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(selectedDesignation)"></button>
 				</ng-template>
 			</p-dialog>
 
 		</div>
 	</p-panel>
+
 	</div>
 </div>
 	
+
+
 

@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Observable, catchError, of, tap, throwError } from 'rxjs';
-import { Idesignation } from 'src/app/idesignation';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Idesignation } from '../api/idesignation';
 @Injectable({
   providedIn: 'root'
 })
 export class DesignationService {
 
-  private designation! : Idesignation[];
+  private designations! : Idesignation[];
 
   constructor(private http : HttpClient) {}
 
   GetDesignation() : Observable<Idesignation[]>
   { 
-    if(this.designation)
+    if(this.designations)
     {
-      return of(this.designation);
+      return of(this.designations);
     }
 
-     return this.http.get<Idesignation[]>("http://192.168.1.11/timesheetapi/api/Designation/GetAll").pipe(
-      tap(data => this.designation = data),
+     return this.http.get<Idesignation[]>("https://localhost:7054/api/Designation/GetAll").pipe(
+      tap(data => {this.designations = data}),
       catchError(this.HandleError)
      );
   }
@@ -38,7 +38,11 @@ export class DesignationService {
 
   GetDesignationById(id : number) : Observable<Idesignation>
   {
-    const url = 'http://192.168.1.11/timesheetapi/api/Designation/GetById/'
+    if(this.designations)
+    {
+      console.log(this.designations)
+    }
+    const url = 'https://localhost:7054/api/Designation/GetById/'
     return this.http.get<Idesignation>(`${url}${id}`).pipe(
     tap(data => console.log('Data' + JSON.stringify(data))),
     catchError(this.HandleError)
@@ -56,7 +60,8 @@ export class DesignationService {
   UpdateDesignation(desgination : Idesignation) : Observable<Idesignation>
   {
     return this.http.put<Idesignation>("https://localhost:7054/api/Designation/Edit", desgination).pipe(
-      tap(data => this.SaveData(data)),
+      tap(data => {this.SaveData(desgination)
+      }),
       catchError(this.HandleError)
     );
   }
@@ -65,18 +70,20 @@ export class DesignationService {
   {
     if(add)
     {
-      this.designation.push(designation);
+      this.designations.push(designation);
     }
     else
     {
-      this.designation = this.designation.map(data => data.designationId == designation.designationId ? designation : data);
+      const index = this.designations.findIndex(item => item.designationId === designation.designationId);
+      if (index !== -1) {
+      this.designations[index] = designation;
+    }
     }
   }
 
-  DeleteDesignation(desgination : number) : Observable<Idesignation[]>
+  DeleteDesignation(desgination : number) : Observable<Idesignation>
   {
-    return this.http.delete<Idesignation[]>(`https://localhost:7054/api/Designation/Delete/${desgination}`).pipe(
-      catchError(this.HandleError)
-    );
+    return this.http.delete<Idesignation>(`https://localhost:7054/api/Designation/Delete/${desgination}`);
+
   }
 }
