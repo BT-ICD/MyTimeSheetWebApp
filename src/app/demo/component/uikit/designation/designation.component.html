@@ -20,27 +20,33 @@
 				currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
 				[globalFilterFields]="['designationId','designationName']"
 				dataKey="designationId"
-				selectionMode="single" [(selection)]="selectedDesignation">
+				selectionMode="single" [(selection)]="selectedDesignation"
+				[columns]="cols">
 
 				<ng-template pTemplate="caption">
-					<div style="text-align: right">
-						<span class="p-input-icon-left">
+					<div class="flex flex-column md:flex-row md:align-items-center">
+
+						<button type="button" pButton pRipple icon="pi pi-file" (click)="myTable.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+
+						<button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+						
+						<span class="p-input-icon-left md:align-items-right">
 							<i class="pi pi-search"></i>
 							<input pInputText type="text"  placeholder="Global Filter" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
 						</span>
-					</div>
+				</div>
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
 						<th style="min-width: 12rem" pSortableColumn="designationId">
 							<div class="flex justify-content-between align-items-center">
-								DesignationId
+								Id
 								<p-sortIcon field="designationId"></p-sortIcon>
 							</div>
 						</th>
 						<th style="min-width: 12rem" pSortableColumn="designationName">
 							<div class="flex justify-content-between align-items-center">
-								DesignationName
+								Name
 								<p-sortIcon field="designationName"></p-sortIcon>	
 							</div>
 						</th>	

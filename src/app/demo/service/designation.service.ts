@@ -60,8 +60,7 @@ export class DesignationService {
   UpdateDesignation(desgination : Idesignation) : Observable<Idesignation>
   {
     return this.http.put<Idesignation>("https://localhost:7054/api/Designation/Edit", desgination).pipe(
-      tap(data => {this.SaveData(desgination)
-      }),
+      tap(data => {this.SaveData(desgination)}),
       catchError(this.HandleError)
     );
   }

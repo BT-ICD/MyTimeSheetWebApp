@@ -1,8 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import * as FileSaver from 'file-saver';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DesignationService } from 'src/app/demo/service/designation.service';
 import { Idesignation } from 'src/app/idesignation';
+// import { ngxCsv } from 'ngx-csv/ngx-csv';
+import { Table } from 'primeng/table';
+
+interface Column {
+  field: string;
+  header: string;
+  customExportHeader?: string;
+}
+
 
 @Component({
   selector: 'app-designation',
@@ -18,6 +28,7 @@ export class DesignationComponent implements OnInit {
   designationData!: Idesignation ;
   designationForm! : FormGroup;
   selectedDesignation!: Idesignation ;
+  cols!: Column[];
 
   constructor(private designationService: DesignationService, private fb : FormBuilder, private messageService: MessageService) { }
 
@@ -32,6 +43,10 @@ export class DesignationComponent implements OnInit {
         designationName : ['', [Validators.required]]
       })
 
+      this.cols = [
+        { field: 'designationId', header: 'DesignationId' },
+        { field: 'designationName', header: 'DesignationName' },
+    ];
   }
 
   fetchTableData(id : number)
@@ -52,27 +67,32 @@ export class DesignationComponent implements OnInit {
 
   editDesgination(selectedDesignation : Idesignation)
   {
-    this.messageService.add({ severity: 'info', summary: 'Please select data you want to change',life: 10000 });
     if(this.selectedDesignation)
     {
       this.designationDialog = true;
       this.selectedDesignation = selectedDesignation;
       this.fetchTableData(selectedDesignation.designationId);
-    } 
+    }
+    else
+    {
+      this.messageService.add({ severity: 'info', summary: 'Please select data you want to change' });
+    }
   }
 
   deleteProduct(selectedDesignation : Idesignation) {
-    this.messageService.add({ severity: 'info', summary: 'Please select data you want to delete',life: 1000});
     if(this.selectedDesignation)
     {
       this.deleteDesginationDialog = true;
       console.log(selectedDesignation.designationId);
     }
+    else {
+      this.messageService.add({ severity: 'info', summary: 'Please select data you want to delete',life: 1000});
+    }
   }
 
   saveDesignation() {
     console.log(this.designationForm);
-    if(this.selectedDesignation && this.selectedDesignation.designationId)
+    if(this.selectedDesignation)
     {
       // debugger
       this.designationService.UpdateDesignation(this.designationForm.value).subscribe()
@@ -82,8 +102,8 @@ export class DesignationComponent implements OnInit {
     {
       this.designationService.InsertDesignation(this.designationForm.value).subscribe();
       this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
-    } 
-    this.designationDialog = false;  
+    }
+    this.designationDialog = false;
 
     // const isUpdate = this.selectedDesignation && this.selectedDesignation.designationId;
     // const formData = { ...this.designationForm.value };
@@ -91,20 +111,12 @@ export class DesignationComponent implements OnInit {
     //   formData.designationId = this.selectedDesignation.designationId;
     // }
     // const apiCall = isUpdate ? this.designationService.UpdateDesignation(formData): this.designationService.InsertDesignation(formData);
-  
+
     // apiCall.subscribe(() => {
     //   console.log(isUpdate ? "Update successful" : "Insert successful");
     //   this.designationDialog = false;
     // });
   }
-
-  // updateDesgination()
-  // {
-  //   debugger;
-  //   this.designationService.UpdateDesignation(this.designationForm.value).subscribe();
-  //   this.designationDialog = false; 
-  //  console.log( this.designationForm.value) 
-  // }
 
   confirmDelete(desgination : Idesignation) {
     this.designationService.DeleteDesignation(desgination.designationId).subscribe();
@@ -112,12 +124,23 @@ export class DesignationComponent implements OnInit {
     this.messageService.add({ severity: 'success', summary: 'Successfuly Deleted'});
     this.deleteDesginationDialog = false;
 }
+exportExcel() {
+  import('xlsx').then((xlsx) => {
+      const worksheet = xlsx.utils.json_to_sheet(this.designationList);
+      const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+      const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+      this.saveAsExcelFile(excelBuffer, 'designationList');
+  });
+}
 
-  // updateLocalData(updatedItem: Idesignation) {
-  //   const index = this.designationList.findIndex(item => item.designationId === updatedItem.designationId);
-  //   if (index !== -1) {
-  //     this.designationList[index] = updatedItem;
-  //   }
-// }
+saveAsExcelFile(buffer: any, fileName: string): void {
+  let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+  let EXCEL_EXTENSION = '.xlsx';
+  const data: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+  });
+  FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
 }
  
+}
+

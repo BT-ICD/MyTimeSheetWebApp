@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { DesignationComponent } from './designation.component';
 import { ToastModule } from 'primeng/toast';
+import { FileUploadModule } from 'primeng/fileupload';
 @NgModule({
   declarations: [
     DesignationComponent
@@ -22,7 +23,8 @@ import { ToastModule } from 'primeng/toast';
     TableModule,
     InputTextModule,
     ButtonModule,
-    ToastModule
+    ToastModule,
+    FileUploadModule
   ]
 })
 export class DesignationModule { }
