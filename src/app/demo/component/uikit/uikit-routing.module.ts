@@ -7,6 +7,12 @@ const routes: Routes = [
     data: { breadcrumb: 'Table1' },
     loadChildren: () => import('./designation/designation.module').then(m => m.DesignationModule) 
   },
+
+  {
+    path : 'clientList',
+    data : {breadcrumb : 'Table'},
+    loadChildren : () =>import('./client-table/client-table.module').then(m=> m.ClientTableModule)
+  }
 ];
 
 @NgModule({

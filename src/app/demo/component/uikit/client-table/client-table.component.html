@@ -1,0 +1,165 @@
+<div class="grid">
+	<div class="col-12">
+        <p-toast></p-toast>
+	<p-panel header="Desgination List">
+		<ng-template pTemplate="icons">
+			<div class="flex btn">
+				<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"  (click)="openNew()" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editDesgination(selectedClient)" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteProduct(selectedClient)" style="margin-right: 10px;"></button>
+			</div>
+		</ng-template>
+		<div class="card">
+			<p-table #myTable [value]="clientList"
+				dataKey="id" 
+				[rows]="10" 
+				[rowHover]="true" 		
+				[paginator]="true" 
+				responsiveLayout="scroll"
+				[showCurrentPageReport]="true"
+				currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+				[globalFilterFields]="['clientId','name', 'email', 'website']"
+				dataKey="clientId"
+				selectionMode="single" [(selection)]="selectedClient"
+				[columns]="cols">
+
+				<ng-template pTemplate="caption">
+					<div class="flex flex-column md:flex-row md:align-items-center">
+
+						<button type="button" pButton pRipple icon="pi pi-file" (click)="myTable.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+
+						<button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+						
+						<span class="p-input-icon-left md:align-items-right">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text"  placeholder="Global Filter" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
+						</span>
+				</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem" pSortableColumn="clientId">
+							<div class="flex justify-content-between align-items-center">
+								Id
+								<p-sortIcon field="clientId"></p-sortIcon>
+							</div>
+						</th>
+						<th style="min-width: 12rem" pSortableColumn="name">
+							<div class="flex justify-content-between align-items-center">
+								Name
+								<p-sortIcon field="name"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="email">
+							<div class="flex justify-content-between align-items-center">
+								Email
+								<p-sortIcon field="email"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="website">
+							<div class="flex justify-content-between align-items-center">
+								website
+								<p-sortIcon field="website"></p-sortIcon>	
+							</div>
+						</th>	
+					</tr>
+					<tr>
+						<th>
+							<span class="p-input-icon-left"> 
+								<i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'clientId','startsWith')"style="width: 10rem"/>
+							</span>
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'name', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'email', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'website', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-clients>
+					<tr [pSelectableRow]="clients">
+						<td>
+							{{clients.clientId}}
+						</td>
+						
+						<td>
+							{{clients.name }}
+						</td>
+						<td>
+							{{clients.email }}
+						</td>
+						<td>
+							{{clients.website }}
+						</td>
+						
+					</tr>
+				</ng-template>
+
+    		</p-table>	
+			<p-dialog [(visible)]="clientDialog" [style]="{width: '450px'}" header="Client Details" [modal]="true" class="p-fluid">
+				<form [formGroup]="clientForm" (ngSubmit)="saveClient()">
+					<div class="field">
+						<h6>Name</h6>
+						<input id="name"  pInputText type="text" formControlName="name" [ngClass]="{ 'ng-invalid ng-dirty':!clientForm.get('name')?.valid && clientForm.get('name')?.touched}">
+
+						<div class="text-danger"  *ngIf="!clientForm.get('name')?.valid && clientForm.get('name')?.touched">Please Enter Name</div>
+					</div>
+                    <div class="field">
+						<h6>Email</h6>
+						<input id="email"  pInputText type="text" formControlName="email" [ngClass]="{ 'ng-invalid ng-dirty':!clientForm.get('email')?.valid && clientForm.get('email')?.touched}">
+
+						<div class="text-danger"  *ngIf="!clientForm.get('email')?.valid && clientForm.get('email')?.touched">Please Enter Email</div>
+					</div>
+                    <div class="field">
+						<h6>Website</h6>
+						<input id="website"  pInputText type="text" formControlName="website" [ngClass]="{ 'ng-invalid ng-dirty':!clientForm.get('website')?.valid && clientForm.get('website')?.touched}">
+
+						<div class="text-danger"  *ngIf="!clientForm.get('website')?.valid && clientForm.get('website')?.touched">Please Enter Website</div>
+					</div>
+                    <div class="flex gap-8">
+                        <div class="ml-4">
+							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>	
+                        </div>
+                        <div class="ml-4">
+                        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                        </div>
+                </div>
+                            <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>						 -->
+                   
+				</form>
+			</p-dialog>
+			
+			<p-dialog [(visible)]="deleteClientDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+				<div class="flex align-items-center justify-content-center">
+					<i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+					<span *ngIf="selectedClient">Are you sure you want to delete <b>{{selectedClient.name}}</b>?</span>
+				</div>
+				<ng-template pTemplate="footer">
+					<button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteClientDialog = false"></button>
+					<button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(selectedClient)"></button>
+				</ng-template>
+			</p-dialog>
+
+		</div>
+	</p-panel>
+
+	</div>
+</div>
+	
+
+
+
+
