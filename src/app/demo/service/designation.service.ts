@@ -85,4 +85,4 @@ export class DesignationService {
     return this.http.delete<Idesignation>(`https://localhost:7054/api/Designation/Delete/${desgination}`);
 
   }
-}
+} 
