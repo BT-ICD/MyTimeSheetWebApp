@@ -93,14 +93,22 @@ export class TaskTypeComponent implements OnInit {
     console.log(this.taskTypeForm);
     if(this.selectedTaskType)
     {
-      // debugger
       this.taskTypeService.UpdateTaskType(this.taskTypeForm.value).subscribe()
       this.messageService.add({ severity: 'success', summary: 'Successfuly Updated'});
     }
     else
     {
-      this.taskTypeService.UpdateTaskType(this.taskTypeForm.value).subscribe();
+      const duplicateName = this.taskTypeList.some(item => item.typeShortName === this.taskTypeForm.value.typeShortName);
+
+      if (!duplicateName) 
+      {
+      this.taskTypeService.InsertTaskType(this.taskTypeForm.value).subscribe();
       this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
+      }
+      else
+      {
+        this.messageService.add({ severity: 'info', summary: `Task type with name "${this.taskTypeForm.value.typeShortName}" already exists.`});
+      }
     }
     this.taskTypeDialog = false;
 

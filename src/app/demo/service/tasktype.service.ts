@@ -71,8 +71,8 @@ export class TasktypeService {
   {
     if(add)
     {
-      this.taskTypes.push(taskType);
-    }
+        this.taskTypes.push(taskType);
+    } 
     else
     {
       const index = this.taskTypes.findIndex(item => item.id === taskType.id)
