@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Iclient } from '../api/iclient';
-import { Observable, catchError, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, catchError, of, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,9 @@ import { Observable, catchError, of, tap, throwError } from 'rxjs';
 export class ClientService {
 
   private clients! : Iclient[];
+  private clientsSubject = new BehaviorSubject<Iclient[]>([]);
+  
+
   constructor(private http : HttpClient) { }
 
   GetAllClients(): Observable<Iclient[]>
@@ -66,11 +69,19 @@ export class ClientService {
     );
   }
 
+  // fetchClients() 
+  // {
+  //    this.http.get<Iclient[]>("https://localhost:7054/api/Client/GetAllClient").subscribe((clients) => {
+  //     this.clientsSubject.next(clients);
+  //   });
+  // }
+
   SaveData(client : Iclient, add : boolean = false)
   {
     if(add)
     {
       this.clients.push(client);
+      // this.fetchClients();
     }
     else
     {

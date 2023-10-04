@@ -104,6 +104,7 @@ export class TaskTypeComponent implements OnInit {
       {
       this.taskTypeService.InsertTaskType(this.taskTypeForm.value).subscribe();
       this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
+      this.taskTypeForm.reset();
       }
       else
       {

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as FileSaver from 'file-saver';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
+import { OverlayPanel } from 'primeng/overlaypanel';
 import { Iclient } from 'src/app/demo/api/iclient';
 import { ClientService } from 'src/app/demo/service/client.service';''
 interface Column {
@@ -16,23 +17,29 @@ interface Column {
   providers: [MessageService]
 })
 export class ClientTableComponent implements OnInit {
-
-  
+  showContactTable = false;
+  menuItems: MenuItem[] =[];
   clientList!: Iclient[];
   clientDialog: boolean = false;
   deleteClientDialog: boolean = false;
-  clientData!: Iclient;
   clientForm! : FormGroup;
   selectedClient!: Iclient;
   cols!: Column[];
-
   constructor(private clientService: ClientService, private fb : FormBuilder, private messageService: MessageService) { }
 
   ngOnInit() {
+
       this.clientService.GetAllClients().subscribe(data => {
         this.clientList = data;
         console.log(this.clientList);
-      })
+
+        this.menuItems = this.clientList.map((client) => ({
+          label: client.name,
+          command: () => this.selectClient(client),
+        }));
+        
+      });
+     
 
       this.clientForm = this.fb.group({
         clientId : ['',[Validators.required]],
@@ -47,6 +54,15 @@ export class ClientTableComponent implements OnInit {
         { field: 'email', header: 'Email' },
         { field: 'website', header: 'Website' },
     ];
+    
+  }
+  handleClientSelection(selectedClient: Iclient) {
+    // Handle the selected client here
+    console.log('Selected client:', selectedClient);
+  }
+  selectClient(client: Iclient) {
+    this.selectedClient = client;
+    this.showContactTable = true;
   }
 
   fetchTableData(id : number)
@@ -63,10 +79,11 @@ export class ClientTableComponent implements OnInit {
   hideDialog() {
     this.clientDialog = false;
   }
+
   openNew() {
     this.clientDialog = true;
   }
-
+ 
   editDesgination(selectedClient : Iclient)
   {
     if(this.selectedClient)
@@ -104,6 +121,7 @@ export class ClientTableComponent implements OnInit {
     {
       this.clientService.InsertClient(this.clientForm.value).subscribe();
       this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
+      this.clientForm.reset();
     }
     this.clientDialog = false;
 

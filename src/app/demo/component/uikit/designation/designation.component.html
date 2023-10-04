@@ -82,7 +82,7 @@
 
     		</p-table>	
 			<p-dialog [(visible)]="designationDialog" [style]="{width: '450px'}" header="Desgination Details" [modal]="true" class="p-fluid">
-				<form [formGroup]="designationForm" (ngSubmit)="saveDesignation()">
+				<form [formGroup]="designationForm">
 					<div class="field">
 						<h4>Desgination Name</h4>
 						<input id="designationName"  pInputText type="text" formControlName="designationName" [ngClass]="{ 'ng-invalid ng-dirty':!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched}">
@@ -91,15 +91,13 @@
 					</div>
                     <div class="flex gap-8">
                         <div class="ml-4">
-							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>	
+							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveDesignation()"></button>	
                         </div>
                         <div class="ml-4">
                         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
                         </div>
                 </div>
-                            <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-                            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>						 -->
-                   
+                            
 				</form>
 			</p-dialog>
 			

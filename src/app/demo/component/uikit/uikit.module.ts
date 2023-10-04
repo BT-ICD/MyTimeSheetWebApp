@@ -5,6 +5,7 @@ import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [  
+
   ],
   imports: [
     CommonModule,

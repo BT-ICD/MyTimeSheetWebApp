@@ -102,6 +102,7 @@ export class DesignationComponent implements OnInit {
     {
       this.designationService.InsertDesignation(this.designationForm.value).subscribe();
       this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
+      this.designationForm.reset();
     }
     this.designationDialog = false;
 

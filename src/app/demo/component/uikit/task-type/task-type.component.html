@@ -94,7 +94,7 @@
 
     		</p-table>	
 			<p-dialog [(visible)]="taskTypeDialog" [style]="{width: '450px'}" header="TaskType Details" [modal]="true" class="p-fluid">
-				<form [formGroup]="taskTypeForm" (ngSubmit)="saveTaskType()">
+				<form [formGroup]="taskTypeForm">
 					<div class="field">
 						<h6>TypeShortName</h6>
 						<input id="typeShortName"  pInputText type="text" formControlName="typeShortName" [ngClass]="{ 'ng-invalid ng-dirty':!taskTypeForm.get('typeShortName')?.valid && taskTypeForm.get('typeShortName')?.touched}">
@@ -109,7 +109,7 @@
 					</div>
                     <div class="flex gap-8">
                         <div class="ml-4">
-							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>	
+							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTaskType()"></button>	
                         </div>
                         <div class="ml-4">
                         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>

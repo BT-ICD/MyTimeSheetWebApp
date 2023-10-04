@@ -7,6 +7,12 @@
 				<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"  (click)="openNew()" style="margin-right: 10px;"></button>
 				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editDesgination(selectedClient)" style="margin-right: 10px;"></button>
 				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteProduct(selectedClient)" style="margin-right: 10px;"></button>
+				
+				<!-- <div> -->
+					<p-menu #menu [model]="menuItems" [popup]="true" [style]="{'width':'8rem'}"></p-menu>
+					<button pButton pRipple type="button" (click)="menu.toggle($event)" icon="pi pi-cog" class="p-button-rounded p-button-info"></button>
+				<!-- </div> -->
+					 
 			</div>
 		</ng-template>
 		<div class="card">
@@ -36,6 +42,7 @@
 						</span>
 				</div>
 				</ng-template>
+				
 				<ng-template pTemplate="header">
 					<tr>
 						<th style="min-width: 12rem" pSortableColumn="clientId">
@@ -109,7 +116,7 @@
 
     		</p-table>	
 			<p-dialog [(visible)]="clientDialog" [style]="{width: '450px'}" header="Client Details" [modal]="true" class="p-fluid">
-				<form [formGroup]="clientForm" (ngSubmit)="saveClient()">
+				<form [formGroup]="clientForm">
 					<div class="field">
 						<h6>Name</h6>
 						<input id="name"  pInputText type="text" formControlName="name" [ngClass]="{ 'ng-invalid ng-dirty':!clientForm.get('name')?.valid && clientForm.get('name')?.touched}">
@@ -130,14 +137,12 @@
 					</div>
                     <div class="flex gap-8">
                         <div class="ml-4">
-							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>	
+							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveClient()"></button>	
                         </div>
                         <div class="ml-4">
                         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
                         </div>
                 </div>
-                            <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-                            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>						 -->
                    
 				</form>
 			</p-dialog>
@@ -148,16 +153,25 @@
 					<span *ngIf="selectedClient">Are you sure you want to delete <b>{{selectedClient.name}}</b>?</span>
 				</div>
 				<ng-template pTemplate="footer">
-					<button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteClientDialog = false"></button>
+
+					<button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteClientDialog = false" ></button>
+
 					<button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(selectedClient)"></button>
 				</ng-template>
 			</p-dialog>
-
 		</div>
-	</p-panel>
+		
+
+		</p-panel>
+
+		<div *ngIf="showContactTable" class="mt-2">
+			<app-client-contacts [clientId]="selectedClient.clientId"></app-client-contacts>
+		  </div>
 
 	</div>
 </div>
+
+
 	
 
 
