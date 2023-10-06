@@ -9,7 +9,7 @@ import { ClientContactsService } from 'src/app/demo/service/client-contacts.serv
   templateUrl: './client-contacts.component.html',
   styleUrls: ['./client-contacts.component.css']
 })
-export class ClientContactsComponent{
+export class ClientContactsComponent {
   
   @Input() clientId!: number;
   clientContactList! : IclientContacts[];
@@ -18,40 +18,39 @@ export class ClientContactsComponent{
   selectedClientContact! : IclientContacts;
   deleteClientContactDialog: boolean = false;
   clientContact!: IclientContacts;
-  formDirty: boolean = false;
 
   constructor(private clientContactsService : ClientContactsService,  private fb : FormBuilder, private messageService : MessageService) {  }
+
  
   ngOnChanges(): void {
-   
     if(this.clientId)
     {
-      this.clientContactsService.getClientContact().subscribe(data => {
-        this.clientContactList = data;
-        console.log(this.clientContactList);
-        this.clientContactList = data.filter(item => item.clientId === this.clientId)
+      this.clientContactsService.getClientContactsByClientId(this.clientId).subscribe(data => {
+         this.clientContactList = data;
+        // console.log(this.clientContactList);
+        // this.clientContactList = data.filter(item => item.clientId === this.clientId)
       });
     }
 
     this.clientContactForm = this.fb.group({
-      contactId : ['',[Validators.required]],
+      contactId :[''],
       name : ['', [Validators.required]],
       email : ['', [Validators.required]],
       mobile : ['', [Validators.required]],
       clientId : this.clientId,
     })
 
-    this.clientContactForm.valueChanges.subscribe(() => {
-    this.formDirty = this.clientContactForm.dirty;
-  });
   }
 
+ 
   openNew() {
     this.clientContactDialog = true;
   }
+
   hideDialog() {
     this.clientContactDialog = false;
   }
+
   fetchTableData(id : number)
   {
     this.clientContactsService.getClientContactById(id).subscribe(data =>{
@@ -73,7 +72,7 @@ export class ClientContactsComponent{
     }
     else
     {
-      this.messageService.add({ severity: 'info', summary: 'Please select data you want to change' });
+      this.messageService.add({ severity: 'info', summary: 'Please select data you want to change'});
     }
   }
 
@@ -90,27 +89,29 @@ export class ClientContactsComponent{
 
   saveClient() {
     console.log(this.clientContactForm);
+    const formData = { ...this.clientContactForm.value };
+    delete formData.contactId;
+    formData.clientId = this.clientId;
+
     if(this.selectedClientContact)
     {
-      this.clientContactsService.updateClientContact(this.clientContactForm.value).subscribe(data =>
+      formData.contactId = this.selectedClientContact.contactId;
+
+      this.clientContactsService.updateClientContact(formData).subscribe(data =>
         {
-        const index = this.clientContactList.findIndex((item) => item.contactId === data.contactId);
-          if (index !== -1) {
-            this.clientContactList[index] = data;
-          }
+          this.messageService.add({ severity: 'success', summary: 'Successfuly Updated'});
         })
-      this.messageService.add({ severity: 'success', summary: 'Successfuly Updated'});
     }
     else
-    {
-      this.clientContactsService.insertClientContact(this.clientContactForm.value).subscribe(data => {
-       this.clientContactList.push(data);
+    { 
+      // formData.clientId = this.clientId;
+      this.clientContactsService.insertClientContact(formData).subscribe(data => {
+       this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
+       
       });
-      this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
-      this.clientContactForm.reset();
     }
     this.clientContactDialog = false;
-    
+    this.clientContactForm.reset();
   }
 
   confirmDelete(clientContact: IclientContacts) {
@@ -119,4 +120,5 @@ export class ClientContactsComponent{
     this.messageService.add({ severity: 'success', summary: 'Successfully Deleted' });
     this.deleteClientContactDialog = false;
   }
+  
 }

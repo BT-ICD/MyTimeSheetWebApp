@@ -120,6 +120,11 @@ export class ClientTableComponent implements OnInit {
     else
     {
       this.clientService.InsertClient(this.clientForm.value).subscribe();
+
+      const newClient: Iclient = this.clientForm.value;
+      // this.clientList.push(newClient);
+      this.menuItems.push({ label: newClient.name, command: () => this.selectClient(newClient) });
+
       this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
       this.clientForm.reset();
     }
