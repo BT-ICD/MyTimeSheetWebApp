@@ -9,11 +9,18 @@ import { BehaviorSubject, Observable, Subscription, catchError, of, tap, throwEr
 export class ClientService {
 
   private clients! : Iclient[];
-  private clientsSubject = new BehaviorSubject<Iclient[]>([]);
-  
+  private clientIdSubject = new BehaviorSubject<number | null>(null);
 
   constructor(private http : HttpClient) { }
 
+  setClientId(clientId: number) {
+    this.clientIdSubject.next(clientId);
+  }
+
+  getClientId() {
+    return this.clientIdSubject.asObservable();
+  }
+  
   GetAllClients(): Observable<Iclient[]>
   {
     if(this.clients)

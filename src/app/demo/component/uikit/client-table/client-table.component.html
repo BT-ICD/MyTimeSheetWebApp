@@ -1,6 +1,6 @@
 <div class="grid">
 	<div class="col-12">
-        <p-toast></p-toast>
+		<app-customtoast></app-customtoast>
 	<p-panel header="Client List">
 		<ng-template pTemplate="icons">
 			<div class="flex btn">
@@ -8,10 +8,16 @@
 				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editDesgination(selectedClient)" style="margin-right: 10px;"></button>
 				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteProduct(selectedClient)" style="margin-right: 10px;"></button>
 				
-				<!-- <div> -->
-					<p-menu #menu [model]="menuItems" [popup]="true" [style]="{'width':'8rem'}"></p-menu>
-					<button pButton pRipple type="button" (click)="menu.toggle($event)" icon="pi pi-cog" class="p-button-rounded p-button-info"></button>
-				<!-- </div> -->
+				<div>
+					<button pButton pRipple icon="pi pi-cog" class="p-button-rounded p-button-help"  (click)="op.toggle($event)" style="margin-right: 10px;"></button>
+					<p-overlayPanel #op>
+						<ng-template pTemplate="content">
+							<button pButton pRipple icon="pi pi-plus" class="p-button-success"   style="margin-right: 10px;" label="Add Contact" (click)="openClientContactsDialog()"></button>
+						</ng-template>
+					</p-overlayPanel>
+					<!-- <p-button (click)="op.toggle($event)" icon="pi pi-image" label="Show"></p-button> -->
+					
+				</div>
 					 
 			</div>
 		</ng-template>
@@ -96,7 +102,7 @@
 				</ng-template>
 
 				<ng-template pTemplate="body" let-clients>
-					<tr [pSelectableRow]="clients">
+					<tr [pSelectableRow]="clients" (click)="selectClient(clients)">
 						<td>
 							{{clients.clientId}}
 						</td>
@@ -119,21 +125,22 @@
 				<form [formGroup]="clientForm">
 					<div class="field">
 						<h6>Name</h6>
-						<input id="name"  pInputText type="text" formControlName="name" [ngClass]="{ 'ng-invalid ng-dirty':!clientForm.get('name')?.valid && clientForm.get('name')?.touched}">
+						<input id="name" required name="name" class="form-control" pInputText type="text" formControlName="name" autofocus  [ngClass]="{ 'is-invalid':!clientForm.get('name')?.valid && clientForm.get('name')?.touched}">
 
-						<div class="text-danger"  *ngIf="!clientForm.get('name')?.valid && clientForm.get('name')?.touched">Please Enter Name</div>
+						<div class="invalid-feedback"  *ngIf="!clientForm.get('name')?.valid && clientForm.get('name')?.touched">Please Enter Name</div>
+
 					</div>
                     <div class="field">
 						<h6>Email</h6>
-						<input id="email"  pInputText type="text" formControlName="email" [ngClass]="{ 'ng-invalid ng-dirty':!clientForm.get('email')?.valid && clientForm.get('email')?.touched}">
+						<input id="email"  required name="email" class="form-control" pInputText type="text" formControlName="email" [ngClass]="{ 'is-invalid':!clientForm.get('email')?.valid && clientForm.get('email')?.touched}">
 
-						<div class="text-danger"  *ngIf="!clientForm.get('email')?.valid && clientForm.get('email')?.touched">Please Enter Email</div>
+						<div class="invalid-feedback" *ngIf="!clientForm.get('email')?.valid && clientForm.get('email')?.touched">Please Enter Email</div>
 					</div>
                     <div class="field">
 						<h6>Website</h6>
-						<input id="website"  pInputText type="text" formControlName="website" [ngClass]="{ 'ng-invalid ng-dirty':!clientForm.get('website')?.valid && clientForm.get('website')?.touched}">
+						<input id="website" required name="website" class="form-control"  pInputText type="text" formControlName="website" [ngClass]="{ 'is-invalid':!clientForm.get('website')?.valid && clientForm.get('website')?.touched}">
 
-						<div class="text-danger"  *ngIf="!clientForm.get('website')?.valid && clientForm.get('website')?.touched">Please Enter Website</div>
+						<div class="invalid-feedback" *ngIf="!clientForm.get('website')?.valid && clientForm.get('website')?.touched">Please Enter Website</div>
 					</div>
                     <div class="flex gap-8">
                         <div class="ml-4">
@@ -163,7 +170,6 @@
 		
 
 		</p-panel>
-
 		<div *ngIf="showContactTable" class="mt-2">
 			<app-client-contacts [clientId]="selectedClient.clientId"></app-client-contacts>
 		  </div>

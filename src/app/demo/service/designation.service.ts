@@ -13,6 +13,7 @@ export class DesignationService {
 
   GetDesignation() : Observable<Idesignation[]>
   { 
+    debugger;
     if(this.designations)
     {
       return of(this.designations);

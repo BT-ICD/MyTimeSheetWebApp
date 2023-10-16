@@ -16,11 +16,13 @@ import { ListboxModule } from 'primeng/listbox';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
-import { ClientContactsComponent } from '../client-contacts/client-contacts.component';
+// import { ClientContactsComponent } from '../client-contacts/client-contacts.component';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { ShareModule } from '../share/share.module';
 @NgModule({
   declarations: [
     ClientTableComponent,
-    ClientContactsComponent
+    // ClientContactsComponent
   ],
   imports: [
     CommonModule,
@@ -37,8 +39,10 @@ import { ClientContactsComponent } from '../client-contacts/client-contacts.comp
     ListboxModule,
     OverlayPanelModule,
     MenuModule,
-    MenubarModule
-    
-  ]
+    MenubarModule,
+    DynamicDialogModule,
+    ShareModule
+  ],
+  providers: [DialogService]
 })
 export class ClientTableModule { }

@@ -10,9 +10,12 @@ import { ButtonModule } from 'primeng/button';
 import { DesignationComponent } from './designation.component';
 import { ToastModule } from 'primeng/toast';
 import { FileUploadModule } from 'primeng/fileupload';
+import { ClientContactsComponent } from '../client-contacts/client-contacts.component';
+import { ShareModule } from '../share/share.module';
 @NgModule({
   declarations: [
-    DesignationComponent
+    DesignationComponent,
+    // ClientContactsComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +27,8 @@ import { FileUploadModule } from 'primeng/fileupload';
     InputTextModule,
     ButtonModule,
     ToastModule,
-    FileUploadModule
+    FileUploadModule,
+    ShareModule
   ]
 })
 export class DesignationModule { }

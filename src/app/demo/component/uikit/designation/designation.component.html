@@ -85,9 +85,13 @@
 				<form [formGroup]="designationForm">
 					<div class="field">
 						<h4>Desgination Name</h4>
-						<input id="designationName"  pInputText type="text" formControlName="designationName" [ngClass]="{ 'ng-invalid ng-dirty':!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched}">
+						<!-- <input id="designationName"  pInputText type="text" formControlName="designationName" [ngClass]="{ 'ng-invalid ng-dirty':!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched}">
 
-						<div class="text-danger"  *ngIf="!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched">Please Enter DesignationName</div>
+						<div class="text-danger"  *ngIf="!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched">Please Enter DesignationName</div> -->
+
+						<input id="designationName" required name="designationName" class="form-control" pInputText type="text" formControlName="designationName" autofocus  [ngClass]="{ 'is-invalid':!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched}">
+
+						<div class="invalid-feedback"  *ngIf="!designationForm.get('designationName')?.valid && designationForm.get('designationName')?.touched">Please Enter DesignationName</div>
 					</div>
                     <div class="flex gap-8">
                         <div class="ml-4">
@@ -114,10 +118,9 @@
 
 		</div>
 	</p-panel>
-
 	</div>
 </div>
-	
+<app-client-contacts [hidden]="true" [data]="designationList"></app-client-contacts>
 
 
 

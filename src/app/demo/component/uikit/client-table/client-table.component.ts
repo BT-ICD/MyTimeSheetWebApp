@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as FileSaver from 'file-saver';
 import { MenuItem, MessageService } from 'primeng/api';
-import { OverlayPanel } from 'primeng/overlaypanel';
 import { Iclient } from 'src/app/demo/api/iclient';
-import { ClientService } from 'src/app/demo/service/client.service';''
+import { ClientService } from 'src/app/demo/service/client.service';
+import { ClientContactsComponent } from '../client-contacts/client-contacts.component';
+import { CustomtoastComponent } from '../customtoast/customtoast.component';
+
 interface Column {
   field: string;
   header: string;
@@ -16,7 +18,8 @@ interface Column {
   styleUrls: ['./client-table.component.css'],
   providers: [MessageService]
 })
-export class ClientTableComponent implements OnInit {
+export class ClientTableComponent implements OnInit{
+
   showContactTable = false;
   menuItems: MenuItem[] =[];
   clientList!: Iclient[];
@@ -25,22 +28,22 @@ export class ClientTableComponent implements OnInit {
   clientForm! : FormGroup;
   selectedClient!: Iclient;
   cols!: Column[];
+  mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
+  @ViewChild(ClientContactsComponent) child!: ClientContactsComponent
+
+
   constructor(private clientService: ClientService, private fb : FormBuilder, private messageService: MessageService) { }
+
+ 
 
   ngOnInit() {
 
       this.clientService.GetAllClients().subscribe(data => {
         this.clientList = data;
         console.log(this.clientList);
-
-        this.menuItems = this.clientList.map((client) => ({
-          label: client.name,
-          command: () => this.selectClient(client),
-        }));
-        
       });
      
-
       this.clientForm = this.fb.group({
         clientId : ['',[Validators.required]],
         name : ['', [Validators.required]],
@@ -54,15 +57,25 @@ export class ClientTableComponent implements OnInit {
         { field: 'email', header: 'Email' },
         { field: 'website', header: 'Website' },
     ];
-    
+
+  
   }
-  handleClientSelection(selectedClient: Iclient) {
-    // Handle the selected client here
-    console.log('Selected client:', selectedClient);
+
+  openClientContactsDialog() {
+    console.log("CLientid :", this.selectedClient);
+    if (this.child) {
+      this.child.clientContactDialog = true;
+    }
+
   }
+
   selectClient(client: Iclient) {
-    this.selectedClient = client;
-    this.showContactTable = true;
+    if (client) {
+      const clientId = client.clientId; 
+       this.clientService.setClientId(clientId); 
+      this.selectedClient = client;
+      this.showContactTable = true;
+    }
   }
 
   fetchTableData(id : number)
@@ -94,7 +107,7 @@ export class ClientTableComponent implements OnInit {
     }
     else
     {
-      this.messageService.add({ severity: 'info', summary: 'Please select data you want to change' });
+      this.customToast.showSelectDataToast();
     }
   }
 
@@ -105,7 +118,7 @@ export class ClientTableComponent implements OnInit {
       console.log(selectedClient.clientId);
     }
     else {
-      this.messageService.add({ severity: 'info', summary: 'Please select data you want to delete',life: 1000});
+      this.customToast.showSelecteDataDeletedToast();
     }
   }
 
@@ -115,32 +128,16 @@ export class ClientTableComponent implements OnInit {
     {
       // debugger
       this.clientService.UpdateClient(this.clientForm.value).subscribe()
-      this.messageService.add({ severity: 'success', summary: 'Successfuly Updated'});
+      this.customToast.showSuccessToast("Updated Successfuly");
     }
     else
     {
       this.clientService.InsertClient(this.clientForm.value).subscribe();
-
-      const newClient: Iclient = this.clientForm.value;
-      // this.clientList.push(newClient);
-      this.menuItems.push({ label: newClient.name, command: () => this.selectClient(newClient) });
-
-      this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
+      this.customToast.showSuccessToast("Inserted Successfuly");
       this.clientForm.reset();
     }
     this.clientDialog = false;
 
-    // const isUpdate = this.selectedDesignation && this.selectedDesignation.designationId;
-    // const formData = { ...this.designationForm.value };
-    // if (isUpdate) {
-    //   formData.designationId = this.selectedDesignation.designationId;
-    // }
-    // const apiCall = isUpdate ? this.designationService.UpdateDesignation(formData): this.designationService.InsertDesignation(formData);
-
-    // apiCall.subscribe(() => {
-    //   console.log(isUpdate ? "Update successful" : "Insert successful");
-    //   this.designationDialog = false;
-    // });
   }
 
   confirmDelete(client : Iclient) {

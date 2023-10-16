@@ -1,8 +1,8 @@
 export interface IclientContacts {
-    contactId : number
+    contactId: number
     name : string,
     mobile : number,
     email : string,
-    clientId : number,
+    clientId: number,
     designationId : number
 }

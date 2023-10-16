@@ -6,6 +6,7 @@ import { DesignationService } from 'src/app/demo/service/designation.service';
 import { Idesignation } from 'src/app/idesignation';
 // import { ngxCsv } from 'ngx-csv/ngx-csv';
 import { Table } from 'primeng/table';
+import { CustomtoastComponent } from '../customtoast/customtoast.component';
 
 interface Column {
   field: string;
@@ -29,6 +30,7 @@ export class DesignationComponent implements OnInit {
   designationForm! : FormGroup;
   selectedDesignation!: Idesignation ;
   cols!: Column[];
+  @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
 
   constructor(private designationService: DesignationService, private fb : FormBuilder, private messageService: MessageService) { }
 
@@ -75,7 +77,7 @@ export class DesignationComponent implements OnInit {
     }
     else
     {
-      this.messageService.add({ severity: 'info', summary: 'Please select data you want to change' });
+      this.customToast.showSelectDataToast();
     }
   }
 
@@ -86,7 +88,7 @@ export class DesignationComponent implements OnInit {
       console.log(selectedDesignation.designationId);
     }
     else {
-      this.messageService.add({ severity: 'info', summary: 'Please select data you want to delete',life: 1000});
+      this.customToast.showSelecteDataDeletedToast();
     }
   }
 
@@ -96,12 +98,12 @@ export class DesignationComponent implements OnInit {
     {
       // debugger
       this.designationService.UpdateDesignation(this.designationForm.value).subscribe()
-      this.messageService.add({ severity: 'success', summary: 'Successfuly Updated'});
+    this.customToast.showSuccessToast("Updated Successfuly");
     }
     else
     {
       this.designationService.InsertDesignation(this.designationForm.value).subscribe();
-      this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
+      this.customToast.showSuccessToast("Inserted Successfuly");
       this.designationForm.reset();
     }
     this.designationDialog = false;
