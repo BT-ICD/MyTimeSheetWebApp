@@ -7,6 +7,7 @@ import { ClientService } from 'src/app/demo/service/client.service';
 import { DesignationService } from 'src/app/demo/service/designation.service';
 import { Idesignation } from 'src/app/idesignation';
 import { CustomtoastComponent } from '../customtoast/customtoast.component';
+import { DesignationComponent } from '../designation/designation.component';
 
 @Component({
   selector: 'app-client-contacts',
@@ -20,7 +21,6 @@ export class ClientContactsComponent implements OnInit{
   //   this.abc = clientId
   // }
 
-  @Input() data!: Idesignation[];
   @Input() clientId!: number;
   clientContactList! : IclientContacts[];
   clientContactDialog: boolean = false;
@@ -32,6 +32,7 @@ export class ClientContactsComponent implements OnInit{
   designationName!: string[];
   designationDataLoaded = false;
   @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
+
 
   constructor(private clientContactsService : ClientContactsService,  private fb : FormBuilder, private messageService : MessageService, private clientService : ClientService, private designationService : DesignationService) {  }
 
@@ -60,12 +61,13 @@ export class ClientContactsComponent implements OnInit{
     this.designationData = data;
     this.designationDataLoaded = true;
     });
+    
 
     this.designationService.GetDesignation().subscribe(data => {
       this.designationName = data.map(designation => designation.designationName);
       console.log(this.designationName);
     })
-   }
+  }
    
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -90,9 +92,10 @@ export class ClientContactsComponent implements OnInit{
   }
 
  
-  openNew() {
-    this.clientContactDialog = true;
-  }
+  // openNew() {
+  //   this.clientContactDialog = true;
+    
+  // }
 
   hideDialog() {
     this.clientContactDialog = false;
@@ -186,23 +189,6 @@ export class ClientContactsComponent implements OnInit{
   }
   
 }
-
-
-
-//const formData = { ...this.clientContactForm.value };
-
-// delete formData.contactId;
-    // formData.clientId = this.clientId;
-
-    // if (this.designationDataLoaded) {
-    //   const selectedDesignation = this.designationData.find(d => d.designationName == formData.designationName);
-  
-    //   if (selectedDesignation) {
-    //     formData.designationId = selectedDesignation.designationId;
-    //   } else {
-    //     console.error('Designation not found for: ' + formData.designationName);
-    //   }
-    // } 
 
 
    

@@ -49,6 +49,7 @@ export class DesignationComponent implements OnInit {
         { field: 'designationId', header: 'DesignationId' },
         { field: 'designationName', header: 'DesignationName' },
     ];
+
   }
 
   fetchTableData(id : number)
