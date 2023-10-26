@@ -1,0 +1,145 @@
+<div class="grid">
+	<div class="col-12">
+        <p-toast></p-toast>
+	<p-panel header="TaskType List">
+		<ng-template pTemplate="icons">
+			<div class="flex btn">
+				<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"  (click)="openNew()" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editDesgination(selectedTaskType)" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteProduct(selectedTaskType)" style="margin-right: 10px;"></button>
+			</div>
+		</ng-template>
+		<div class="card">
+			<p-table #myTable [value]="taskTypeList"
+				dataKey="id" 
+				[rows]="10" 
+				[rowHover]="true" 		
+				[paginator]="true" 
+				responsiveLayout="scroll"
+				[showCurrentPageReport]="true"
+				currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+				[globalFilterFields]="['id','typeShortName', 'typeDescription']"
+				dataKey="id"
+				selectionMode="single" [(selection)]="selectedTaskType"
+				[columns]="cols">
+
+				<ng-template pTemplate="caption">
+					<div class="flex flex-column md:flex-row md:align-items-center">
+
+						<button type="button" pButton pRipple icon="pi pi-file" (click)="myTable.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+
+						<button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+						
+						<span class="p-input-icon-left md:align-items-right">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text"  placeholder="Global Filter" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
+						</span>
+				</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem" pSortableColumn="clientId">
+							<div class="flex justify-content-between align-items-center">
+								Id
+								<p-sortIcon field="id"></p-sortIcon>
+							</div>
+						</th>
+						<th style="min-width: 12rem" pSortableColumn="typeShortName">
+							<div class="flex justify-content-between align-items-center">
+								TypeShortName
+								<p-sortIcon field="typeShortName"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="typeDescription">
+							<div class="flex justify-content-between align-items-center">
+								TypeDescription
+								<p-sortIcon field="typeDescription"></p-sortIcon>	
+							</div>
+						</th>	
+					</tr>
+					<tr>
+						<th>
+							<span class="p-input-icon-left"> 
+								<i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'id','startsWith')"style="width: 10rem"/>
+							</span>
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'typeShortName', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'typeDescription', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-taskType>
+					<tr [pSelectableRow]="taskType">
+						<td>
+							{{taskType.id}}
+						</td>
+						
+						<td>
+							{{taskType.typeShortName }}
+						</td>
+						<td>
+							{{taskType.typeDescription }}
+						</td>		
+					</tr>
+				</ng-template>
+
+    		</p-table>	
+			<p-dialog [(visible)]="taskTypeDialog" [style]="{width: '450px'}" header="TaskType Details" [modal]="true" class="p-fluid">
+				<form [formGroup]="taskTypeForm">
+					<div class="field">
+						<h6>TypeShortName</h6>
+						<input id="typeShortName"  pInputText type="text" formControlName="typeShortName" [ngClass]="{ 'ng-invalid ng-dirty':!taskTypeForm.get('typeShortName')?.valid && taskTypeForm.get('typeShortName')?.touched}">
+
+						<div class="text-danger"  *ngIf="!taskTypeForm.get('typeShortName')?.valid && taskTypeForm.get('typeShortName')?.touched">Please Enter Name</div>
+					</div>
+                    <div class="field">
+						<h6>TypeDescription</h6>
+						<input id="typeDescription"  pInputText type="text" formControlName="typeDescription" [ngClass]="{ 'ng-invalid ng-dirty':!taskTypeForm.get('typeDescription')?.valid && taskTypeForm.get('typeDescription')?.touched}">
+
+						<div class="text-danger"  *ngIf="!taskTypeForm.get('typeDescription')?.valid && taskTypeForm.get('typeDescription')?.touched">Please Enter Email</div>
+					</div>
+                    <div class="flex gap-8">
+                        <div class="ml-4">
+							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTaskType()"></button>	
+                        </div>
+                        <div class="ml-4">
+                        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                        </div>
+                </div>
+                            <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"></button>						 -->
+                   
+				</form>
+			</p-dialog>
+			
+			<p-dialog [(visible)]="deletetaskTypeDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+				<div class="flex align-items-center justify-content-center">
+					<i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+					<span *ngIf="selectedTaskType">Are you sure you want to delete <b>{{selectedTaskType.typeShortName}}</b>?</span>
+				</div>
+				<ng-template pTemplate="footer">
+					<button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletetaskTypeDialog = false"></button>
+					<button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(selectedTaskType)"></button>
+				</ng-template>
+			</p-dialog>
+
+		</div>
+	</p-panel>
+
+	</div>
+</div>
+	
+
+
+
+
+

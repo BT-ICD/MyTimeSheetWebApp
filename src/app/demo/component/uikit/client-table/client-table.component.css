@@ -1,0 +1,9 @@
+.rounded-button {   border-radius: 20px; } .rounded-dropdown {   border-radius: 20px; }
+
+
+  ul {
+    list-style-type: none; 
+  }
+  li {
+    margin-right: 50px; 
+  }
