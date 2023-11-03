@@ -12,6 +12,7 @@ interface Column {
   header: string;
   customExportHeader?: string;
 }
+
 @Component({
   selector: 'app-client-table',
   templateUrl: './client-table.component.html',
@@ -38,10 +39,9 @@ export class ClientTableComponent implements OnInit{
  
 
   ngOnInit() {
-
+      console.log("Client component");
       this.clientService.GetAllClients().subscribe(data => {
         this.clientList = data;
-        console.log(this.clientList);
       });
      
       this.clientForm = this.fb.group({
@@ -97,7 +97,7 @@ export class ClientTableComponent implements OnInit{
     this.clientDialog = true;
   }
  
-  editDesgination(selectedClient : Iclient)
+  editClient(selectedClient : Iclient)
   {
     if(this.selectedClient)
     {
@@ -111,7 +111,7 @@ export class ClientTableComponent implements OnInit{
     }
   }
 
-  deleteProduct(selectedClient : Iclient) {
+  deleteClient(selectedClient : Iclient) {
     if(this.selectedClient)
     {
       this.deleteClientDialog = true;
@@ -134,8 +134,8 @@ export class ClientTableComponent implements OnInit{
     {
       this.clientService.InsertClient(this.clientForm.value).subscribe();
       this.customToast.showSuccessToast("Inserted Successfuly");
-      this.clientForm.reset();
     }
+    this.clientForm.reset();
     this.clientDialog = false;
 
   }
@@ -163,8 +163,5 @@ saveAsExcelFile(buffer: any, fileName: string): void {
   });
   FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
 }
- 
-
-
 
 }

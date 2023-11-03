@@ -5,10 +5,9 @@
 		<ng-template pTemplate="icons">
 			<div class="flex btn">
 				<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"  (click)="openNew()" style="margin-right: 10px;"></button>
-				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editDesgination(selectedClient)" style="margin-right: 10px;"></button>
-				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteProduct(selectedClient)" style="margin-right: 10px;"></button>
-				
-				<div>
+				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editClient(selectedClient)" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteClient(selectedClient)" style="margin-right: 10px;"></button>
+			<div>
 					<button pButton pRipple icon="pi pi-cog" class="p-button-rounded p-button-help"  (click)="op.toggle($event)" style="margin-right: 10px;"></button>
 					<p-overlayPanel #op>
 						<ng-template pTemplate="content">
@@ -22,8 +21,7 @@
 			</div>
 		</ng-template>
 		<div class="card">
-			<p-table #myTable [value]="clientList"
-				dataKey="id" 
+			<p-table #myTable [value]="clientList" 
 				[rows]="10" 
 				[rowHover]="true" 		
 				[paginator]="true" 
@@ -37,9 +35,7 @@
 
 				<ng-template pTemplate="caption">
 					<div class="flex flex-column md:flex-row md:align-items-center">
-
 						<button type="button" pButton pRipple icon="pi pi-file" (click)="myTable.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
-
 						<button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
 						
 						<span class="p-input-icon-left md:align-items-right">
@@ -47,8 +43,8 @@
 							<input pInputText type="text"  placeholder="Global Filter" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
 						</span>
 				</div>
-				</ng-template>
 				
+				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
 						<th style="min-width: 12rem" pSortableColumn="clientId">
@@ -127,20 +123,20 @@
 						<h6>Name</h6>
 						<input id="name" required name="name" class="form-control" pInputText type="text" formControlName="name" autofocus  [ngClass]="{ 'is-invalid':!clientForm.get('name')?.valid && clientForm.get('name')?.touched}">
 
-						<div class="invalid-feedback"  *ngIf="!clientForm.get('name')?.valid && clientForm.get('name')?.touched">Please Enter Name</div>
+						<div class="invalid-feedback"  *ngIf="!clientForm.get('name')?.valid && clientForm.get('name')?.touched">Please enter name</div>
 
 					</div>
                     <div class="field">
 						<h6>Email</h6>
 						<input id="email"  required name="email" class="form-control" pInputText type="text" formControlName="email" [ngClass]="{ 'is-invalid':!clientForm.get('email')?.valid && clientForm.get('email')?.touched}">
 
-						<div class="invalid-feedback" *ngIf="!clientForm.get('email')?.valid && clientForm.get('email')?.touched">Please Enter Email</div>
+						<div class="invalid-feedback" *ngIf="!clientForm.get('email')?.valid && clientForm.get('email')?.touched">Please enter email</div>
 					</div>
                     <div class="field">
 						<h6>Website</h6>
 						<input id="website" required name="website" class="form-control"  pInputText type="text" formControlName="website" [ngClass]="{ 'is-invalid':!clientForm.get('website')?.valid && clientForm.get('website')?.touched}">
 
-						<div class="invalid-feedback" *ngIf="!clientForm.get('website')?.valid && clientForm.get('website')?.touched">Please Enter Website</div>
+						<div class="invalid-feedback" *ngIf="!clientForm.get('website')?.valid && clientForm.get('website')?.touched">Please enter website</div>
 					</div>
                     <div class="flex gap-8">
                         <div class="ml-4">

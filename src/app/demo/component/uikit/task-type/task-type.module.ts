@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { FileUploadModule } from 'primeng/fileupload';
+import { ShareModule } from '../share/share.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FileUploadModule } from 'primeng/fileupload';
     TaskTypeRoutingModule,
     PanelModule,
     DialogModule,
-    FormsModule,ReactiveFormsModule ,TableModule,InputTextModule,ButtonModule,ToastModule,FileUploadModule
+    FormsModule,ReactiveFormsModule ,TableModule,InputTextModule,ButtonModule,ToastModule,FileUploadModule,
+    ShareModule
   ]
 })
 export class TaskTypeModule { }

@@ -4,9 +4,9 @@
 	<p-panel header="Contact List">
 		<ng-template pTemplate="icons">
 			<div class="flex btn">
-				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" style="margin-right: 10px;" (click)="editDesgination(selectedClientContact)"></button>
+				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" style="margin-right: 10px;" (click)="editClientContact(selectedClientContact)"></button>
 
-				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"  style="margin-right: 10px;" (click)="deleteProduct(selectedClientContact)" ></button>
+				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"  style="margin-right: 10px;" (click)="deleteClientContact(selectedClientContact)" ></button>
 									 
 			</div>
 		</ng-template>
@@ -59,11 +59,34 @@
 						</th>	
 						<th style="min-width: 12rem" pSortableColumn="mobile">
 							<div class="flex justify-content-between align-items-center">
-								Mobile
+								Contact No
 								<p-sortIcon field="mobile"></p-sortIcon>	
 							</div>
 						</th>	
 					</tr>
+					<tr>
+						<th>
+							<span class="p-input-icon-left"> 
+								<i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'contactId','startsWith')"style="width: 10rem"/>
+							</span>
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'name', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'email', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'mobile', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						</tr>
 					
 				</ng-template>
 
@@ -93,24 +116,24 @@
 						<h6>Name</h6>
 						<input id="name" required name="name" class="form-control" pInputText type="text" formControlName="name" autofocus  [ngClass]="{ 'is-invalid':!clientContactForm.get('name')?.valid && clientContactForm.get('name')?.touched}">
 
-						<div class="invalid-feedback"  *ngIf="!clientContactForm.get('name')?.valid && clientContactForm.get('name')?.touched">Please Enter Name</div>
+						<div class="invalid-feedback"  *ngIf="!clientContactForm.get('name')?.valid && clientContactForm.get('name')?.touched">Please enter name</div>
 					</div>
                     <div class="field">
 						<h6>Email</h6>
 						<input id="email" required pInputText type="text" name="email" class="form-control" formControlName="email" [ngClass]="{ 'is-invalid':!clientContactForm.get('email')?.valid && clientContactForm.get('email')?.touched}">
 
-						<div class="invalid-feedback" *ngIf="!clientContactForm.get('email')?.valid && clientContactForm.get('email')?.touched">Please Enter Email</div>
+						<div class="invalid-feedback" *ngIf="!clientContactForm.get('email')?.valid && clientContactForm.get('email')?.touched">Please enter email</div>
 					</div>
                     <div class="field">
 						<h6>Mobile</h6>
 						<input id="mobile" required class="form-control" name="mobile" pInputText type="text" formControlName="mobile" [ngClass]="{ 'is-invalid':!clientContactForm.get('mobile')?.valid && clientContactForm.get('mobile')?.touched}">
 
-						<div class="invalid-feedback"  *ngIf="!clientContactForm.get('mobile')?.valid && clientContactForm.get('mobile')?.touched">Please Enter Mobile No</div>
+						<div class="invalid-feedback"  *ngIf="!clientContactForm.get('mobile')?.valid && clientContactForm.get('mobile')?.touched">Please enter mobile no</div>
 					</div>
 
                     <div class="field">
-						<h6>Designation</h6>
-    					<p-dropdown formControlName="designationName" [options]="designationName"  appendTo="body" placeholder="Select a DesignationName" [showClear]="true"  ></p-dropdown>
+						<h6>Designation name</h6>
+    					<p-dropdown  formControlName="designationName" [options]="designationName"  appendTo="body" placeholder="Select a DesignationName" [showClear]="true"></p-dropdown>
 					</div>
 					
 

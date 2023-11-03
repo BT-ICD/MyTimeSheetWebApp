@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as FileSaver from 'file-saver';
 import { MessageService } from 'primeng/api';
 import { Itasktype } from 'src/app/demo/api/itasktype';
 import { TasktypeService } from 'src/app/demo/service/tasktype.service';
+import { CustomtoastComponent } from '../customtoast/customtoast.component';
 
 interface Column {
   field: string;
@@ -25,7 +26,8 @@ export class TaskTypeComponent implements OnInit {
   taskTypeForm! : FormGroup;
   selectedTaskType!: Itasktype ;
   cols!: Column[];
-
+  @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
+  
   constructor(private taskTypeService: TasktypeService, private fb : FormBuilder, private messageService: MessageService) { }
 
   ngOnInit() {
@@ -64,7 +66,7 @@ export class TaskTypeComponent implements OnInit {
     this.taskTypeDialog = true;
   }
 
-  editDesgination(selectedTaskType : Itasktype)
+  editTaskType(selectedTaskType : Itasktype)
   {
     if(this.selectedTaskType)
     {
@@ -78,39 +80,47 @@ export class TaskTypeComponent implements OnInit {
     }
   }
 
-  deleteProduct(selectedTaskType : Itasktype) {
+  deleteTaskType(selectedTaskType : Itasktype) {
     if(this.selectedTaskType)
     {
       this.deletetaskTypeDialog = true;
       console.log(selectedTaskType.id);
     }
     else {
-      this.messageService.add({ severity: 'info', summary: 'Please select data you want to delete',life: 1000});
+      this.customToast.showSelecteDataDeletedToast();
     }
+  }
+
+  normalizetypeShortName(typeShortName: string): string {
+    return typeShortName.toLowerCase();
   }
 
   saveTaskType() {
     console.log(this.taskTypeForm);
-    if(this.selectedTaskType)
-    {
-      this.taskTypeService.UpdateTaskType(this.taskTypeForm.value).subscribe()
-      this.messageService.add({ severity: 'success', summary: 'Successfuly Updated'});
-    }
-    else
-    {
-      const duplicateName = this.taskTypeList.some(item => item.typeShortName === this.taskTypeForm.value.typeShortName);
 
-      if (!duplicateName) 
+    const newtypeShortName = this.normalizetypeShortName(this.taskTypeForm.value.typeShortName);
+    const isUpdate = !!this.selectedTaskType;
+
+    const normalizedtypeShortNames = this.taskTypeList.map(item => this.normalizetypeShortName(item.typeShortName));
+
+    if (normalizedtypeShortNames.includes(newtypeShortName)) {
+      this.messageService.add({
+        severity: 'error',
+        summary: `TaskShort name "${newtypeShortName}" already exists.`
+      });
+    }
+    else{
+      if(isUpdate)
       {
-      this.taskTypeService.InsertTaskType(this.taskTypeForm.value).subscribe();
-      this.messageService.add({ severity: 'success', summary: 'Successfuly Inserted'});
-      this.taskTypeForm.reset();
+        this.taskTypeService.UpdateTaskType(this.taskTypeForm.value).subscribe()
+        this.customToast.showSuccessToast("Updated Successfuly");
       }
-      else
-      {
-        this.messageService.add({ severity: 'info', summary: `Task type with name "${this.taskTypeForm.value.typeShortName}" already exists.`});
+      else{
+        this.taskTypeService.InsertTaskType(this.taskTypeForm.value).subscribe();
+        this.customToast.showSuccessToast("Inserted Successfuly");
       }
     }
+    this.taskTypeForm.reset();
     this.taskTypeDialog = false;
 
     // const isUpdate = this.selectedTaskType && this.selectedTaskType.designationId;

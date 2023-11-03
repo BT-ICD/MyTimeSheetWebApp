@@ -1,12 +1,12 @@
 <div class="grid">
 	<div class="col-12">
-        <p-toast></p-toast>
+       <app-customtoast></app-customtoast>
 	<p-panel header="TaskType List">
 		<ng-template pTemplate="icons">
 			<div class="flex btn">
 				<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"  (click)="openNew()" style="margin-right: 10px;"></button>
-				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editDesgination(selectedTaskType)" style="margin-right: 10px;"></button>
-				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteProduct(selectedTaskType)" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editTaskType(selectedTaskType)" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteTaskType(selectedTaskType)" style="margin-right: 10px;"></button>
 			</div>
 		</ng-template>
 		<div class="card">
@@ -36,6 +36,7 @@
 						</span>
 				</div>
 				</ng-template>
+				
 				<ng-template pTemplate="header">
 					<tr>
 						<th style="min-width: 12rem" pSortableColumn="clientId">
@@ -99,13 +100,13 @@
 						<h6>TypeShortName</h6>
 						<input id="typeShortName"  pInputText type="text" formControlName="typeShortName" [ngClass]="{ 'ng-invalid ng-dirty':!taskTypeForm.get('typeShortName')?.valid && taskTypeForm.get('typeShortName')?.touched}">
 
-						<div class="text-danger"  *ngIf="!taskTypeForm.get('typeShortName')?.valid && taskTypeForm.get('typeShortName')?.touched">Please Enter Name</div>
+						<div class="text-danger"  *ngIf="!taskTypeForm.get('typeShortName')?.valid && taskTypeForm.get('typeShortName')?.touched">Please enter name</div>
 					</div>
                     <div class="field">
 						<h6>TypeDescription</h6>
 						<input id="typeDescription"  pInputText type="text" formControlName="typeDescription" [ngClass]="{ 'ng-invalid ng-dirty':!taskTypeForm.get('typeDescription')?.valid && taskTypeForm.get('typeDescription')?.touched}">
 
-						<div class="text-danger"  *ngIf="!taskTypeForm.get('typeDescription')?.valid && taskTypeForm.get('typeDescription')?.touched">Please Enter Email</div>
+						<div class="text-danger"  *ngIf="!taskTypeForm.get('typeDescription')?.valid && taskTypeForm.get('typeDescription')?.touched">Please enter email</div>
 					</div>
                     <div class="flex gap-8">
                         <div class="ml-4">

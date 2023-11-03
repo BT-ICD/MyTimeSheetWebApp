@@ -13,10 +13,17 @@ const routes: Routes = [
     data : {breadcrumb : 'Table'},
     loadChildren : () =>import('./client-table/client-table.module').then(m=> m.ClientTableModule)
   },
+
   {
     path : 'taskTypeList',
     data : {breadcrumb : 'Tbl'},
     loadChildren : () =>import('./task-type/task-type.module').then(m=> m.TaskTypeModule)
+  },
+
+  {
+    path : 'teamMemberList',
+    data : {breadcrumb : 'Tbl'},
+    loadChildren : () =>import('./team-member/team-member.module').then(m=> m.TeamMemberModule)
   }
 ];
 

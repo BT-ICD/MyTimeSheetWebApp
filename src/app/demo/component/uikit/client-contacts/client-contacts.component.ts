@@ -7,7 +7,13 @@ import { ClientService } from 'src/app/demo/service/client.service';
 import { DesignationService } from 'src/app/demo/service/designation.service';
 import { Idesignation } from 'src/app/idesignation';
 import { CustomtoastComponent } from '../customtoast/customtoast.component';
-import { DesignationComponent } from '../designation/designation.component';
+import * as FileSaver from 'file-saver';
+
+interface Column {
+  field: string;
+  header: string;
+  customExportHeader?: string;
+}
 
 @Component({
   selector: 'app-client-contacts',
@@ -31,6 +37,7 @@ export class ClientContactsComponent implements OnInit{
   designationData!: Idesignation[];
   designationName!: string[];
   designationDataLoaded = false;
+  cols!: Column[];
   @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
 
 
@@ -59,43 +66,49 @@ export class ClientContactsComponent implements OnInit{
 
     this.designationService.GetDesignation().subscribe(data => {
     this.designationData = data;
+    this.designationName = this.designationData.map(designation => designation.designationName);
     this.designationDataLoaded = true;
+    console.log(this.designationName);
     });
     
-
-    this.designationService.GetDesignation().subscribe(data => {
-      this.designationName = data.map(designation => designation.designationName);
-      console.log(this.designationName);
-    })
+    this.cols = [
+      { field: 'contactId', header: 'ContactId' },
+      { field: 'name', header: 'Name' },
+      { field: 'email', header: 'Email' },
+      { field: 'mobile', header: 'Contact No' },
+  ];
   }
    
 
-  ngOnChanges(changes: SimpleChanges): void {
-//     if(this.clientId)
-//     {
-//       this.clientContactsService.getClientContactsByClientId(this.clientId).subscribe(data => {
-//          this.clientContactList = data;
-//         // console.log(this.clientContactList);
-//         // this.clientContactList = data.filter(item => item.clientId === this.clientId)
-//       });
-//     }
-//     this.clientContactForm = this.fb.group({
-//       contactId :[''],
-//       name : ['', [Validators.required]],
-//       email : ['', [Validators.required]],
-//       mobile : ['', [Validators.required]],
-//       clientId : this.clientId,
-//     })
+  ngOnChanges(): void {
+    // if(this.clientId)
+    // {
+    //   this.clientContactsService.getClientContactsByClientId(this.clientId).subscribe(data => {
+    //      this.clientContactList = data;
+    //     // console.log(this.clientContactList);
+    //     // this.clientContactList = data.filter(item => item.clientId === this.clientId)
+    //   });
+    // }
+    // this.clientContactForm = this.fb.group({
+    //   contactId :[''],
+    //   name : ['', [Validators.required]],
+    //   email : ['', [Validators.required]],
+    //   mobile : ['', [Validators.required]],
+    //   clientId : this.clientId,
+    //   designationName: ['', Validators.required],
+    //   designationId : ['']
+    // })
+
+    // this.designationService.GetDesignation().subscribe(data => {
+    //   this.designationData = data;
+    //   this.designationDataLoaded = true;
+    //   });
       
-
-//  console.log("designation data=>", this.data);
+  
+    //   this.designationService.GetDesignation().subscribe(data => {
+    //     this.designationName = data.map(designation => designation.designationName);
+    //   })
   }
-
- 
-  // openNew() {
-  //   this.clientContactDialog = true;
-    
-  // }
 
   hideDialog() {
     this.clientContactDialog = false;
@@ -110,10 +123,11 @@ export class ClientContactsComponent implements OnInit{
       this.clientContactForm.controls['name'].setValue(data.name);
       this.clientContactForm.controls['email'].setValue(data.email);
       this.clientContactForm.controls['mobile'].setValue(data.mobile);
+      this.clientContactForm.controls['designationId'].setValue(data.designationId);
     });
   }
 
-  editDesgination(selectedClientContact : IclientContacts)
+  editClientContact(selectedClientContact : IclientContacts)
   {
     if(this.selectedClientContact)
     {
@@ -127,7 +141,7 @@ export class ClientContactsComponent implements OnInit{
     }
   }
 
-  deleteProduct(selectedClientContact : IclientContacts) {
+  deleteClientContact(selectedClientContact : IclientContacts) {
     if(this.selectedClientContact)
     {
       this.deleteClientContactDialog = true;
@@ -171,7 +185,6 @@ export class ClientContactsComponent implements OnInit{
     }
     else
     {  
-      // formData.clientId = this.clientId;
       this.clientContactsService.insertClientContact(formData).subscribe(data => {
         console.log(data);
         this.customToast.showSuccessToast("Inserted Succefully");       
@@ -188,8 +201,63 @@ export class ClientContactsComponent implements OnInit{
     this.deleteClientContactDialog = false;
   }
   
+  exportExcel() {
+    import('xlsx').then((xlsx) => {
+        const worksheet = xlsx.utils.json_to_sheet(this.clientContactList);
+        const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+        const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+        this.saveAsExcelFile(excelBuffer, 'clientContactList');
+    });
+  }
+  
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const data: Blob = new Blob([buffer], {
+        type: EXCEL_TYPE
+    });
+    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
+   
+  
 }
 
 
    
-    
+// saveClient() {
+//   debugger;
+//   console.log(this.clientContactForm.value);
+//   if(this.selectedClientContact)
+//   {
+//     console.log(this.clientContactForm.value);
+//     // this.clientContactsService.updateClientContact(this.clientContactForm.value).subscribe(data =>
+//     //   {
+//     //     this.customToast.showSuccessToast("Updated Succefully");
+//     //   })
+//   }
+//   else
+//   {  
+//     const newContactData = {
+//       contactId : 0,
+//       clientId: this.clientId, 
+//       name: this.clientContactForm.value.name,
+//       email: this.clientContactForm.value.email,
+//       mobile: this.clientContactForm.value.mobile,
+//       designationId : 0
+//     };
+
+//     const selectedDesignation = this.designationData.find(d => d.designationName === this.clientContactForm.value.designationName);
+
+//   if (selectedDesignation) {
+//     newContactData.designationId = selectedDesignation.designationId;
+//     console.log(newContactData);
+
+//     this.clientContactsService.insertClientContact(newContactData).subscribe(data => {
+//       console.log(data);
+//       this.customToast.showSuccessToast("Inserted Successfully");
+//     });
+//   }    
+//   }
+//    this.clientContactDialog = false;
+//   this.clientContactForm.reset();
+// }

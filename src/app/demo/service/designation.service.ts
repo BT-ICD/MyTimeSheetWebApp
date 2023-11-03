@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, tap, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Idesignation } from '../api/idesignation';
 @Injectable({
@@ -10,6 +10,13 @@ export class DesignationService {
   private designations! : Idesignation[];
 
   constructor(private http : HttpClient) {}
+
+  private designationListSubject = new BehaviorSubject<Idesignation[]>([]);
+  designationList = this.designationListSubject.asObservable();
+
+  setDesignationList(list: Idesignation[]) {
+    this.designationListSubject.next(list);
+  }
 
   GetDesignation() : Observable<Idesignation[]>
   { 

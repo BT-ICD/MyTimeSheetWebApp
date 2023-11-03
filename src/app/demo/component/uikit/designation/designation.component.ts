@@ -4,8 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DesignationService } from 'src/app/demo/service/designation.service';
 import { Idesignation } from 'src/app/idesignation';
-// import { ngxCsv } from 'ngx-csv/ngx-csv';
-import { Table } from 'primeng/table';
 import { CustomtoastComponent } from '../customtoast/customtoast.component';
 
 interface Column {
@@ -35,9 +33,11 @@ export class DesignationComponent implements OnInit {
   constructor(private designationService: DesignationService, private fb : FormBuilder, private messageService: MessageService) { }
 
   ngOnInit() {
+    console.log("designation component");
       this.designationService.GetDesignation().subscribe(data => {
+        this.designationService.setDesignationList(data);
         this.designationList = data;
-        console.log(this.designationList);
+        localStorage.setItem('designationList', JSON.stringify(this.designationList));
       })
 
       this.designationForm = this.fb.group({
@@ -49,7 +49,7 @@ export class DesignationComponent implements OnInit {
         { field: 'designationId', header: 'DesignationId' },
         { field: 'designationName', header: 'DesignationName' },
     ];
-
+    
   }
 
   fetchTableData(id : number)
@@ -82,7 +82,7 @@ export class DesignationComponent implements OnInit {
     }
   }
 
-  deleteProduct(selectedDesignation : Idesignation) {
+  deleteDesignation(selectedDesignation : Idesignation) {
     if(this.selectedDesignation)
     {
       this.deleteDesginationDialog = true;
@@ -93,20 +93,38 @@ export class DesignationComponent implements OnInit {
     }
   }
 
+  normalizeDesignationName(designationName: string): string {
+    return designationName.toLowerCase();
+  }
+
   saveDesignation() {
+    debugger
     console.log(this.designationForm);
-    if(this.selectedDesignation)
+    
+    const newDesignationName = this.normalizeDesignationName(this.designationForm.value.designationName);
+    const isUpdate = !!this.selectedDesignation;
+
+    const normalizedDesignationNames = this.designationList.map(item => this.normalizeDesignationName(item.designationName));
+
+  if (normalizedDesignationNames.includes(newDesignationName)) {
+    this.messageService.add({
+      severity: 'error',
+      summary: `Designation name "${newDesignationName}" already exists.`
+    });
+  }
+  else{
+    if(isUpdate)
     {
-      // debugger
       this.designationService.UpdateDesignation(this.designationForm.value).subscribe()
-    this.customToast.showSuccessToast("Updated Successfuly");
+      this.customToast.showSuccessToast("Updated Successfuly");
     }
-    else
-    {
-      this.designationService.InsertDesignation(this.designationForm.value).subscribe();
+    else{
+       this.designationService.InsertDesignation(this.designationForm.value).subscribe();
       this.customToast.showSuccessToast("Inserted Successfuly");
-      this.designationForm.reset();
-    }
+  }
+  }
+
+    this.designationForm.reset();
     this.designationDialog = false;
 
     // const isUpdate = this.selectedDesignation && this.selectedDesignation.designationId;

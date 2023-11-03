@@ -14,7 +14,7 @@ import { CustomtoastComponent } from '../customtoast/customtoast.component';
 
 @NgModule({
   declarations: [ClientContactsComponent, CustomtoastComponent],
-  exports : [ClientContactsComponent, CustomtoastComponent],
+  exports : [ClientContactsComponent, CustomtoastComponent,],
   imports: [
     CommonModule,
     PanelModule,

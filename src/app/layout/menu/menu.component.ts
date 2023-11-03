@@ -25,7 +25,8 @@ export class MenuComponent  implements OnInit {
               items: [
                   { label: 'Designation List', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/designationList'] }, 
                   {label : 'Client List', icon : 'pi pi-fw pi-table', routerLink : ['/uikit/clientList']},   
-                  {label : 'TaskType List', icon : 'pi pi-fw pi-table', routerLink : ['/uikit/taskTypeList']}    
+                  {label : 'TaskType List', icon : 'pi pi-fw pi-table', routerLink : ['/uikit/taskTypeList']},   
+                  {label : 'Team Member List', icon : 'pi pi-fw pi-table', routerLink : ['/uikit/teamMemberList']}    
               ]
           },
         

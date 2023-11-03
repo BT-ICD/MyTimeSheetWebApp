@@ -30,5 +30,9 @@ export class CustomtoastComponent {
     this.messageService.add({ severity: 'info', summary: 'Please select data you want to change'});
   }
   
-
+  // showDuplicateNameError()
+  // {
+  //   this.messageService.add({ severity: 'info', summary: 'Please select data you want to change'});
+   
+  // }
 }
