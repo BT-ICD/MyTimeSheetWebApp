@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClientContactsComponent } from '../client-contacts/client-contacts.component';
 import { PanelModule } from 'primeng/panel';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +10,8 @@ import { ToastModule } from 'primeng/toast';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DropdownModule } from 'primeng/dropdown';
 import { CustomtoastComponent } from '../customtoast/customtoast.component';
+import { ClientContactsComponent } from '../client-contacts/client-contacts.component';
+import { Idesignation } from '../../api/idesignation';
 
 @NgModule({
   declarations: [ClientContactsComponent, CustomtoastComponent],
@@ -25,6 +26,6 @@ import { CustomtoastComponent } from '../customtoast/customtoast.component';
     ButtonModule,ToastModule,FileUploadModule,DropdownModule,
     FormsModule
     
-  ]
+  ],
 })
 export class ShareModule { }

@@ -23,10 +23,11 @@ export class MenuComponent  implements OnInit {
           {
               label: 'UI Components',
               items: [
-                  { label: 'Designation List', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/designationList'] }, 
-                  {label : 'Client List', icon : 'pi pi-fw pi-table', routerLink : ['/uikit/clientList']},   
-                  {label : 'TaskType List', icon : 'pi pi-fw pi-table', routerLink : ['/uikit/taskTypeList']},   
-                  {label : 'Team Member List', icon : 'pi pi-fw pi-table', routerLink : ['/uikit/teamMemberList']}    
+                  { label: 'Designation List', icon: 'pi pi-fw pi-table', routerLink: ['/component/designationList'] }, 
+                  {label : 'Client List', icon : 'pi pi-fw pi-table', routerLink : ['/component/clientList']},   
+                  {label : 'TaskType List', icon : 'pi pi-fw pi-table', routerLink : ['/component/taskTypeList']},   
+                  {label : 'Team Member List', icon : 'pi pi-fw pi-table', routerLink : ['/component/teamMemberList']} ,   
+                  {label : 'Project List', icon : 'pi pi-fw pi-table', routerLink : ['/component/projectList']}    
               ]
           },
         

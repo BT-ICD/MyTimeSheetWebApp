@@ -15,7 +15,14 @@ export class DesignationService {
   designationList = this.designationListSubject.asObservable();
 
   setDesignationList(list: Idesignation[]) {
+    this.designations = list;
     this.designationListSubject.next(list);
+    console.log("list", this.designations);
+  }
+
+  getDesignationList()
+  {
+    return this.designations;
   }
 
   GetDesignation() : Observable<Idesignation[]>

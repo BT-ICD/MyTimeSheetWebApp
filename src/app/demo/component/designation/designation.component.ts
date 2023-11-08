@@ -35,7 +35,8 @@ export class DesignationComponent implements OnInit {
   ngOnInit() {
     console.log("designation component");
       this.designationService.GetDesignation().subscribe(data => {
-        this.designationService.setDesignationList(data);
+        const list = this.designationService.setDesignationList(data);
+        console.log(" desingationlist", list);
         this.designationList = data;
         localStorage.setItem('designationList', JSON.stringify(this.designationList));
       })
@@ -106,12 +107,12 @@ export class DesignationComponent implements OnInit {
 
     const normalizedDesignationNames = this.designationList.map(item => this.normalizeDesignationName(item.designationName));
 
-  if (normalizedDesignationNames.includes(newDesignationName)) {
-    this.messageService.add({
-      severity: 'error',
-      summary: `Designation name "${newDesignationName}" already exists.`
-    });
-  }
+    if (normalizedDesignationNames.includes(newDesignationName)) {
+      this.messageService.add({
+        severity: 'error',
+        summary: `Designation name "${newDesignationName}" already exists.`
+      });
+    }
   else{
     if(isUpdate)
     {

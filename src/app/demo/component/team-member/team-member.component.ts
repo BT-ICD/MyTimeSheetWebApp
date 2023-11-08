@@ -73,6 +73,10 @@ export class TeamMemberComponent implements OnInit{
        this.designationList = JSON.parse(designationListString) as Idesignation[];
       this.designationNames = this.designationList.map(x=> x.designationName);
     }
+
+    // this.designationList= this.designationService.getDesignationList();
+    // this.designationNames = this.designationList.map(x=> x.designationName);
+    // console.log("designation===>",  this.designationList);
   }
 
 
@@ -86,16 +90,30 @@ export class TeamMemberComponent implements OnInit{
       const formattedDateBirth = datePipe.transform(new Date(dataofbirth), 'yyyy-MM-dd');
       const formattedDateJoin = datePipe.transform(new Date(dateofjoin), 'yyyy-MM-dd');
 
-      this.teamMemberForm.controls['teamMemberId'].setValue(data.teamMemberId);
-      this.teamMemberForm.controls['name'].setValue(data.name);
-      this.teamMemberForm.controls['email'].setValue(data.email);
-      this.teamMemberForm.controls['mobile'].setValue(data.mobile);
-      this.teamMemberForm.controls['notes'].setValue(data.notes);
-      this.teamMemberForm.controls['alternateContact'].setValue(data.alternateContact);
-      this.teamMemberForm.controls['dob'].setValue(formattedDateBirth);
-      this.teamMemberForm.controls['doj'].setValue(formattedDateJoin);
-      this.teamMemberForm.controls['designationName'].setValue(data.designationName);
+      // this.teamMemberForm.controls['teamMemberId'].setValue(data.teamMemberId);
+      // this.teamMemberForm.controls['name'].setValue(data.name);
+      // this.teamMemberForm.controls['email'].setValue(data.email);
+      // this.teamMemberForm.controls['mobile'].setValue(data.mobile);
+      // this.teamMemberForm.controls['notes'].setValue(data.notes);
+      // this.teamMemberForm.controls['alternateContact'].setValue(data.alternateContact);
+      // this.teamMemberForm.controls['dob'].setValue(formattedDateBirth);
+      // this.teamMemberForm.controls['doj'].setValue(formattedDateJoin);
+      // this.teamMemberForm.controls['designationName'].setValue(data.designationName);
+
+      this.teamMemberForm.setValue({
+        teamMemberId: data.teamMemberId,
+        name: data.name,
+        mobile: data.mobile,
+        email: data.email,
+        notes: data.notes,
+        alternateContact: data.alternateContact,
+        dob: formattedDateBirth,
+        doj: formattedDateJoin,
+        designationName: data.designationName 
+      });
     });
+
+   
   }
 
   hideDialog() {
@@ -121,11 +139,11 @@ export class TeamMemberComponent implements OnInit{
     }
   }
 
-  deleteTeamMember(selectedClient : IteamMember) {
+  deleteTeamMember(selectedTeamMember : IteamMember) {
     if(this.selectedTeamMember)
     {
       this.deleteTeamMemberDialog = true;
-      console.log(selectedClient.teamMemberId);
+      console.log(selectedTeamMember.teamMemberId);
     }
     else {
       this.customToast.showSelecteDataDeletedToast();
@@ -140,6 +158,7 @@ export class TeamMemberComponent implements OnInit{
      
     if (selectedDesignation) {
       formData.designationId = selectedDesignation.designationId;
+      
     }
 
     console.log(formData);
@@ -163,9 +182,9 @@ export class TeamMemberComponent implements OnInit{
 
   }
 
-  confirmDelete(client : IteamMember) {
-    this.teamMemberService.DeleteTeamMember(client.teamMemberId).subscribe();
-    this.teamMemberList = this.teamMemberList.filter(item => item.teamMemberId !== client.teamMemberId);
+  confirmDelete(teamMember : IteamMember) {
+    this.teamMemberService.DeleteTeamMember(teamMember.teamMemberId).subscribe();
+    this.teamMemberList = this.teamMemberList.filter(item => item.teamMemberId !== teamMember.teamMemberId);
     this.messageService.add({ severity: 'success', summary: 'Successfuly Deleted'});
     this.deleteTeamMemberDialog = false;
 }

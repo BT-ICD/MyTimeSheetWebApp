@@ -71,6 +71,9 @@ export class ClientContactsComponent implements OnInit{
     console.log(this.designationName);
     });
     
+    const list = this.designationService.getDesignationList();
+    console.log("designation===>", list);
+    
     this.cols = [
       { field: 'contactId', header: 'ContactId' },
       { field: 'name', header: 'Name' },
@@ -119,11 +122,21 @@ export class ClientContactsComponent implements OnInit{
   {
     this.clientContactsService.getClientContactById(id).subscribe(data =>{
       console.log(data);
+
       this.clientContactForm.controls['contactId'].setValue(data.contactId);
       this.clientContactForm.controls['name'].setValue(data.name);
       this.clientContactForm.controls['email'].setValue(data.email);
       this.clientContactForm.controls['mobile'].setValue(data.mobile);
       this.clientContactForm.controls['designationId'].setValue(data.designationId);
+
+      // this.clientContactForm.setValue({
+      //   contactId : data.contactId,
+      //   name : data.name,
+      //   email : data.email,
+      //   mobile : data.mobile,
+      //   designationId : data.designationId
+      // })
+      
     });
   }
 

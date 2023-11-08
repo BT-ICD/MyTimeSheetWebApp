@@ -42,6 +42,7 @@ export class ClientTableComponent implements OnInit{
       console.log("Client component");
       this.clientService.GetAllClients().subscribe(data => {
         this.clientList = data;
+        localStorage.setItem('clientList', JSON.stringify(this.clientList));
       });
      
       this.clientForm = this.fb.group({

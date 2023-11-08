@@ -22,7 +22,7 @@ export class CustomtoastComponent {
 
   showSelecteDataDeletedToast()
   {
-    this.messageService.add({ severity: 'info', summary: 'Info', detail : 'Please select data you want to delete'});
+    this.messageService.add({ severity: 'info', summary: 'Please select data you want to delete'});
   }
 
   showSelectDataToast()
