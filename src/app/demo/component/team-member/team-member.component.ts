@@ -52,7 +52,6 @@ export class TeamMemberComponent implements OnInit{
         alternateContact : ['', [Validators.required]],
         dob : ['', [Validators.required]],
         doj : ['', [Validators.required]],
-        //designationId : ['', [Validators.required]],
         designationName : ['', [Validators.required]],
       })
 
@@ -68,15 +67,11 @@ export class TeamMemberComponent implements OnInit{
         { field: 'designationName', header: 'DesignationName'},
     ];
  
-    const designationListString = localStorage.getItem('designationList');
-    if (designationListString !== null) {
-       this.designationList = JSON.parse(designationListString) as Idesignation[];
-      this.designationNames = this.designationList.map(x=> x.designationName);
-    }
-
-    // this.designationList= this.designationService.getDesignationList();
-    // this.designationNames = this.designationList.map(x=> x.designationName);
-    // console.log("designation===>",  this.designationList);
+    this.designationService.GetDesignation().subscribe(data =>{
+      this.designationList = data;
+      this.designationNames = data.map(x=> x.designationName);
+      console.log("designation===>",this.designationList);
+    });
   }
 
 
@@ -157,8 +152,7 @@ export class TeamMemberComponent implements OnInit{
     const selectedDesignation = this.designationList.find(d => d.designationName == formData.designationName);
      
     if (selectedDesignation) {
-      formData.designationId = selectedDesignation.designationId;
-      
+      formData.designationId = selectedDesignation.designationId; 
     }
 
     console.log(formData);
@@ -173,7 +167,7 @@ export class TeamMemberComponent implements OnInit{
     }
     else
     {
-      this.teamMemberService.InsertTeamMember(formData, formData.designationName).subscribe();
+      this.teamMemberService.InsertTeamMember(formData).subscribe();
       this.customToast.showSuccessToast("Inserted Successfuly");
       this.teamMemberForm.reset();
     }

@@ -34,9 +34,8 @@ export class ClientContactsComponent implements OnInit{
   selectedClientContact! : IclientContacts;
   deleteClientContactDialog: boolean = false;
   clientContact!: IclientContacts;
-  designationData!: Idesignation[];
-  designationName!: string[];
-  designationDataLoaded = false;
+  designationNames: string[] = [];
+  designationList !: Idesignation[];
   cols!: Column[];
   @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
 
@@ -64,15 +63,12 @@ export class ClientContactsComponent implements OnInit{
       designationId : ['']
     })
 
-    this.designationService.GetDesignation().subscribe(data => {
-    this.designationData = data;
-    this.designationName = this.designationData.map(designation => designation.designationName);
-    this.designationDataLoaded = true;
-    console.log(this.designationName);
-    });
     
-    const list = this.designationService.getDesignationList();
-    console.log("designation===>", list);
+    this.designationService.GetDesignation().subscribe(data =>{
+      this.designationList = data;
+      this.designationNames = data.map(x=> x.designationName);
+      console.log("designation===>",this.designationList);
+    });
     
     this.cols = [
       { field: 'contactId', header: 'ContactId' },
@@ -173,18 +169,13 @@ export class ClientContactsComponent implements OnInit{
     delete formData.contactId;
     formData.clientId = this.clientId;
 
-    if (this.designationDataLoaded)
-     {
-      const selectedDesignation = this.designationData.find(d => d.designationName == formData.designationName);
+    const selectedDesignation = this.designationList.find(d => d.designationName == formData.designationName);
+     
+    if (selectedDesignation) {
+      formData.designationId = selectedDesignation.designationId; 
+    }
 
-      delete formData.designationName;
-
-      if (selectedDesignation) {
-        formData.designationId = selectedDesignation.designationId;
-      } else {
-        console.error('Designation not found for: ' + formData.designationName);
-      }
-    } 
+    console.log(formData);
 
     console.log(formData)
     if(this.selectedClientContact)
@@ -234,43 +225,3 @@ export class ClientContactsComponent implements OnInit{
    
   
 }
-
-
-   
-// saveClient() {
-//   debugger;
-//   console.log(this.clientContactForm.value);
-//   if(this.selectedClientContact)
-//   {
-//     console.log(this.clientContactForm.value);
-//     // this.clientContactsService.updateClientContact(this.clientContactForm.value).subscribe(data =>
-//     //   {
-//     //     this.customToast.showSuccessToast("Updated Succefully");
-//     //   })
-//   }
-//   else
-//   {  
-//     const newContactData = {
-//       contactId : 0,
-//       clientId: this.clientId, 
-//       name: this.clientContactForm.value.name,
-//       email: this.clientContactForm.value.email,
-//       mobile: this.clientContactForm.value.mobile,
-//       designationId : 0
-//     };
-
-//     const selectedDesignation = this.designationData.find(d => d.designationName === this.clientContactForm.value.designationName);
-
-//   if (selectedDesignation) {
-//     newContactData.designationId = selectedDesignation.designationId;
-//     console.log(newContactData);
-
-//     this.clientContactsService.insertClientContact(newContactData).subscribe(data => {
-//       console.log(data);
-//       this.customToast.showSuccessToast("Inserted Successfully");
-//     });
-//   }    
-//   }
-//    this.clientContactDialog = false;
-//   this.clientContactForm.reset();
-// }

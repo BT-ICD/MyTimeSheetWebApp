@@ -46,7 +46,7 @@ export class ProjectService {
     {
       console.log(this.projects)
     }
-    const url = ''
+    const url = 'https://localhost:7054/api/Project/GetProjectById/'
     return this.http.get<Iproject>(`${url}${id}`).pipe(
     tap(data => console.log('Data' + JSON.stringify(data))),
     catchError(this.HandleError)

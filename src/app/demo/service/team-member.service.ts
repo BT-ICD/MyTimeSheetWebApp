@@ -51,10 +51,10 @@ export class TeamMemberService {
     )
   }
 
-  InsertTeamMember(teamMember : IteamMember, designationName : string) : Observable<IteamMember>
+  InsertTeamMember(teamMember : IteamMember) : Observable<IteamMember>
   {
     debugger
-    return this.http.post<IteamMember>(`https://localhost:7054/api/TeamMember/InsertTeamMember/${designationName}`, teamMember).pipe(
+    return this.http.post<IteamMember>(`https://localhost:7054/api/TeamMember/InsertTeamMember`, teamMember).pipe(
       tap(data => this.SaveData(data, true)),
       catchError(this.HandleError)
     );

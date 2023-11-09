@@ -35,10 +35,7 @@ export class DesignationComponent implements OnInit {
   ngOnInit() {
     console.log("designation component");
       this.designationService.GetDesignation().subscribe(data => {
-        const list = this.designationService.setDesignationList(data);
-        console.log(" desingationlist", list);
         this.designationList = data;
-        localStorage.setItem('designationList', JSON.stringify(this.designationList));
       })
 
       this.designationForm = this.fb.group({

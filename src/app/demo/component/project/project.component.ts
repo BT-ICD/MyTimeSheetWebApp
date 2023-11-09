@@ -6,6 +6,7 @@ import { CustomtoastComponent } from '../customtoast/customtoast.component';
 import { ProjectService } from '../../service/project.service';
 import { MessageService } from 'primeng/api';
 import { Iclient } from '../../api/iclient';
+import { ClientService } from '../../service/client.service';
 
 interface Column {
   field: string;
@@ -32,7 +33,7 @@ export class ProjectComponent implements OnInit{
 
   @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
 
-  constructor(private projectService: ProjectService, private fb : FormBuilder, private messageService: MessageService) { }
+  constructor(private projectService: ProjectService, private fb : FormBuilder, private messageService: MessageService, private clientService : ClientService) { }
 
   ngOnInit() {
       this.projectService.getAllProject().subscribe(data => {
@@ -47,19 +48,19 @@ export class ProjectComponent implements OnInit{
         clientName : ['', [Validators.required]]
       })
 
-      const clientListString = localStorage.getItem('clientList');
-      if (clientListString !== null) {
-         this.clientList = JSON.parse(clientListString) as Iclient[];
-        this.clientNames = this.clientList.map(x=> x.name);
-        console.log("clientlist==>",this.clientNames);
-      }
+      this.clientService.getClientLookUp().subscribe(data =>
+        {
+          this.clientList = data;
+          console.log("clientList",data);
+          this.clientNames = data.map(x=>x.name);
+        }
+      );
 
       this.cols = [
         { field: 'projectId', header: 'ProjectId' },
         { field: 'name', header: 'Name' },
         { field: 'clientId', header: 'ClientId' },
-        { field: 'initiatedOn', header: 'initiatedOn' },
-      
+        { field: 'initiatedOn', header: 'initiatedOn' },     
     ];
  
   }
@@ -73,6 +74,7 @@ export class ProjectComponent implements OnInit{
       this.projectForm.controls['name'].setValue(data.name);
       this.projectForm.controls['clientId'].setValue(data.clientId);
       this.projectForm.controls['initiatedOn'].setValue(data.initiatedOn);
+      this.projectForm.controls['clientName'].setValue(data.clientName);
     });
   }
 
@@ -120,11 +122,7 @@ export class ProjectComponent implements OnInit{
     if (selectedClient) {
       formData.clientId = selectedClient.clientId;
     }
-
     console.log(formData);
-
-
-
     if(this.selectedProject)
     {
       // debugger

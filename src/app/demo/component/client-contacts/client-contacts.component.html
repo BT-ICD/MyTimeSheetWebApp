@@ -63,6 +63,12 @@
 								<p-sortIcon field="mobile"></p-sortIcon>	
 							</div>
 						</th>	
+						<th style="min-width: 12rem" pSortableColumn="designationName">
+							<div class="flex justify-content-between align-items-center">
+								Designation name
+								<p-sortIcon field="designationName"></p-sortIcon>	
+							</div>
+						</th>	
 					</tr>
 					<tr>
 						<th>
@@ -86,6 +92,11 @@
 								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'mobile', 'startsWith')"style="width: 10rem"/>
 							</span>	
 						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'designationName', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
 						</tr>
 					
 				</ng-template>
@@ -104,6 +115,9 @@
 						</td>
 						<td>
 							{{clientContacts.mobile }}
+						</td>
+						<td>
+							{{clientContacts.designationName}}
 						</td>
 						
 					</tr>
@@ -133,7 +147,7 @@
 
                     <div class="field">
 						<h6>Designation name</h6>
-    					<p-dropdown  formControlName="designationName" [options]="designationName"  appendTo="body" placeholder="Select a DesignationName" [showClear]="true"></p-dropdown>
+    					<p-dropdown  formControlName="designationName" [options]="designationNames"  appendTo="body" placeholder="Select a DesignationName" [showClear]="true"></p-dropdown>
 					</div>
 					
 

@@ -44,7 +44,7 @@ export class TasktypeService {
     {
       console.log(this.taskTypes);
     }
-    const url ='';
+    const url ='https://localhost:7054/api/TaskType/GetTaskTypeById/';
     return this.http.get<Itasktype>(`${url}${id}`).pipe(
       tap(data => console.log('Data' +JSON.stringify(data))),
       catchError(this.HandleError),
