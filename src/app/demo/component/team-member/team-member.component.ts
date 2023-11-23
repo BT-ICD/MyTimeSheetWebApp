@@ -82,8 +82,8 @@ export class TeamMemberComponent implements OnInit{
       const dataofbirth = data.dob;
       const dateofjoin = data.doj;
       //const datePipe = new DatePipe('en-US');
-      const formattedDateBirth = this.datePipe.transform(new Date(dataofbirth), 'yyyy-MM-dd');
-      const formattedDateJoin = this.datePipe.transform(new Date(dateofjoin), 'yyyy-MM-dd');
+      //const formattedDateBirth = this.datePipe.transform(new Date(dataofbirth), 'yyyy-MM-dd');
+      //const formattedDateJoin = this.datePipe.transform(new Date(dateofjoin), 'yyyy-MM-dd');
 
       // this.teamMemberForm.controls['teamMemberId'].setValue(data.teamMemberId);
       // this.teamMemberForm.controls['name'].setValue(data.name);
@@ -102,8 +102,8 @@ export class TeamMemberComponent implements OnInit{
         email: data.email,
         notes: data.notes,
         alternateContact: data.alternateContact,
-        dob: formattedDateBirth,
-        doj: formattedDateJoin,
+        dob: data.dob,
+        doj: data.doj,
         designationName: data.designationName 
       });
     });
@@ -151,11 +151,11 @@ export class TeamMemberComponent implements OnInit{
     const formData = { ...this.teamMemberForm.value };
     const selectedDesignation = this.designationList.find(d => d.designationName == formData.designationName);
 
-    const formattedDOB = this.datePipe.transform(formData.dob, 'yyyy-MM-dd');
-    formData.dob = formattedDOB;
+    // const formattedDOB = this.datePipe.transform(formData.dob, 'yyyy-MM-dd');
+    // formData.dob = formattedDOB;
 
-    const formattedDOJ = this.datePipe.transform(formData.doj, 'yyyy-MM-dd');
-    formData.doj = formattedDOJ;
+    // const formattedDOJ = this.datePipe.transform(formData.doj, 'yyyy-MM-dd');
+    // formData.doj = formattedDOJ;
 
     if (selectedDesignation) {
       formData.designationId = selectedDesignation.designationId; 

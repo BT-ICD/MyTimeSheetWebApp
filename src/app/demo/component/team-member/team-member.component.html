@@ -220,16 +220,39 @@
 
                     <div class="field">
 						<h6>Date of birth</h6>
-						<input id="dob" required name="dob" class="form-control"  pInputText type="text" formControlName="dob" [ngClass]="{ 'is-invalid':!teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched}">
+						<!-- <input id="dob" required name="dob" class="form-control"  pInputText type="text" formControlName="dob" [ngClass]="{ 'is-invalid':!teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched}">
 
-						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched">Please enter date of birth</div>
+						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched">Please enter date of birth</div> -->
+
+						<p-inputMask formControlName="dob" mask="9999-99-99" placeholder="yyyy-mm-dd" slotChar="yyyy-mm-dd"
+						[ngClass]="{
+							'is-invalid': !teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched,
+							'custom-invalid': !teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched
+						}">
+						</p-inputMask>
+				
+						<div *ngIf="teamMemberForm.get('dob')?.errors?.['required'] && teamMemberForm.get('dob')?.touched" class="invalid-feedback">
+							Please enter date of birth
+						</div>
+
 					</div>
 
                     <div class="field">
 						<h6>Date of join</h6>
-						<input id="doj" required name="doj" class="form-control"  pInputText type="text" formControlName="doj" [ngClass]="{ 'is-invalid':!teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched}">
+						<!-- <input id="doj" required name="doj" class="form-control"  pInputText type="text" formControlName="doj" [ngClass]="{ 'is-invalid':!teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched}">
 
-						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched">Please enter date of join</div>
+						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched">Please enter date of join</div> -->
+
+						<p-inputMask formControlName="doj" mask="9999-99-99" placeholder="yyyy-mm-dd" slotChar="yyyy-mm-dd"
+						[ngClass]="{
+							'is-invalid': !teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched,
+							'custom-invalid': !teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched
+						}">
+						</p-inputMask>
+				
+						<div *ngIf="teamMemberForm.get('doj')?.errors?.['required'] && teamMemberForm.get('doj')?.touched" class="invalid-feedback">
+							Please enter date of join
+						</div>
 					</div>
 
 					<div class="field">

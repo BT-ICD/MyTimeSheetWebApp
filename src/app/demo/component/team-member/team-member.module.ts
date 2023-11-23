@@ -15,6 +15,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TeamMemberComponent } from './team-member.component';
 import { ShareModule } from '../share/share.module';
 import { DialogModule } from 'primeng/dialog';
+import { InputMaskModule } from 'primeng/inputmask';
 
 @NgModule({
   declarations: [TeamMemberComponent],
@@ -34,7 +35,8 @@ import { DialogModule } from 'primeng/dialog';
     PanelModule,
     OverlayPanelModule,
     ShareModule,
-    DialogModule
+    DialogModule,
+    InputMaskModule
   
   ]
 })
