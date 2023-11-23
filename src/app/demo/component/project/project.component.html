@@ -130,7 +130,7 @@
 
                     <div class="field">
 						<h6>InitiatedOn</h6>
-						<p-inputMask formControlName="initiatedOn" mask="9999/99/99" placeholder="yyyy/mm/dd" slotChar="yyyy/mm/dd"
+						<p-inputMask formControlName="initiatedOn" mask="9999-99-99" placeholder="yyyy-mm-dd" slotChar="yyyy-mm-dd"
 						[ngClass]="{
 							'is-invalid': !projectForm.get('initiatedOn')?.valid && projectForm.get('initiatedOn')?.touched,
 							'custom-invalid': !projectForm.get('initiatedOn')?.valid && projectForm.get('initiatedOn')?.touched
