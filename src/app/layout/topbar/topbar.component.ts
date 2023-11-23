@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { LayoutService } from '../service/layout.service';
 import { MenuItem } from 'primeng/api';
+import { OverlayPanel } from 'primeng/overlaypanel';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
@@ -14,6 +16,15 @@ export class TopbarComponent {
   @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
 
   @ViewChild('topbarmenu') menu!: ElementRef;
+  
+  @ViewChild('overlayPanel') overlayPanel!: OverlayPanel;
 
-  constructor(public layoutService: LayoutService) { }
+  constructor(public layoutService: LayoutService, private router : Router) { }
+
+ 
+  logout()
+  {
+    this.router.navigate(['/login']);
+  }
+
 }

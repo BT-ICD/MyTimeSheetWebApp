@@ -16,7 +16,7 @@ import { PanelModule } from 'primeng/panel';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ShareModule } from '../share/share.module';
 import { DialogModule } from 'primeng/dialog';
-
+import { InputMaskModule } from 'primeng/inputmask';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,8 @@ import { DialogModule } from 'primeng/dialog';
     PanelModule,
     OverlayPanelModule,
     ShareModule,
-    DialogModule
+    DialogModule,
+    InputMaskModule
   ]
 })
 export class ProjectModule { }

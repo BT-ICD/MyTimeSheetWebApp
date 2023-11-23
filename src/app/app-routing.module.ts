@@ -1,14 +1,21 @@
 import { ExtraOptions, PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { LayoutComponent } from './layout/layout/layout.component';
+import { LoginComponent } from './demo/component/auth/login/login.component';
 
 const routes: Routes = [
     {
-      path: '', component: LayoutComponent,
+      path:'layout', component: LayoutComponent,
       children: [  
         { path: 'component', loadChildren: () => import('./demo/component/component.module').then(m => m.ComponentModule),data: { preload: true }, }
       ]
-    }
+    },
+    { path:'login', component: LoginComponent },
+    {
+      path: '',
+      redirectTo: '/login',
+      pathMatch: 'full',
+    },
   ];
   
   const routerConfig: ExtraOptions = {

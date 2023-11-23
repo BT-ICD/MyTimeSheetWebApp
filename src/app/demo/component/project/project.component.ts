@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import * as FileSaver from 'file-saver';
 import { Iproject } from '../../api/iproject';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -7,6 +7,7 @@ import { ProjectService } from '../../service/project.service';
 import { MessageService } from 'primeng/api';
 import { Iclient } from '../../api/iclient';
 import { ClientService } from '../../service/client.service';
+import { DatePipe } from '@angular/common';
 
 interface Column {
   field: string;
@@ -18,7 +19,8 @@ interface Column {
   selector: 'app-project',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, DatePipe],
+  encapsulation: ViewEncapsulation.None 
 })
 export class ProjectComponent implements OnInit{
 
@@ -33,7 +35,7 @@ export class ProjectComponent implements OnInit{
 
   @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
 
-  constructor(private projectService: ProjectService, private fb : FormBuilder, private messageService: MessageService, private clientService : ClientService) { }
+  constructor(private projectService: ProjectService, private fb : FormBuilder, private messageService: MessageService, private clientService : ClientService,private datePipe: DatePipe) { }
 
   ngOnInit() {
       this.projectService.getAllProject().subscribe(data => {
@@ -43,12 +45,12 @@ export class ProjectComponent implements OnInit{
       this.projectForm = this.fb.group({
         projectId : ['',[Validators.required]],
         name : ['', [Validators.required]],
-        clientId : ['', [Validators.required]],
+        //clientId : ['', [Validators.required]],
         initiatedOn : ['', [Validators.required]],
         clientName : ['', [Validators.required]]
       })
 
-      this.clientService.getClientLookUp().subscribe(data =>
+      this.clientService.GetAllClients().subscribe(data =>
         {
           this.clientList = data;
           console.log("clientList",data);
@@ -70,11 +72,21 @@ export class ProjectComponent implements OnInit{
   {
     this.projectService.getProjectById(id).subscribe(data =>{
       console.log(data);
-      this.projectForm.controls['projectId'].setValue(data.projectId);
-      this.projectForm.controls['name'].setValue(data.name);
-      this.projectForm.controls['clientId'].setValue(data.clientId);
-      this.projectForm.controls['initiatedOn'].setValue(data.initiatedOn);
-      this.projectForm.controls['clientName'].setValue(data.clientName);
+      const initiatedOn = data.initiatedOn;
+      // this.projectForm.controls['projectId'].setValue(data.projectId);
+      // this.projectForm.controls['name'].setValue(data.name);
+      // //this.projectForm.controls['clientId'].setValue(data.clientId);
+      // this.projectForm.controls['initiatedOn'].setValue(data.initiatedOn);
+      // this.projectForm.controls['clientName'].setValue(data.clientName);
+
+      const formattedDateBirth = this.datePipe.transform(new Date(initiatedOn), 'yyyy-MM-dd');
+
+      this.projectForm.setValue({
+        projectId : data.projectId,
+        name : data.name,
+        initiatedOn : formattedDateBirth,
+        clientName : data.clientName
+      })
     });
   }
 
@@ -115,13 +127,17 @@ export class ProjectComponent implements OnInit{
 
   saveProject() {
     console.log(this.projectForm);
-    
+    debugger;
     const formData = { ...this.projectForm.value };
     const selectedClient = this.clientList.find(d => d.name == formData.clientName);
      
+    const formattedDate = this.datePipe.transform(formData.initiatedOn, 'yyyy-MM-dd');
+    formData.initiatedOn = formattedDate;
+
     if (selectedClient) {
       formData.clientId = selectedClient.clientId;
     }
+    
     console.log(formData);
     if(this.selectedProject)
     {

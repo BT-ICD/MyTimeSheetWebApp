@@ -130,9 +130,19 @@
 
                     <div class="field">
 						<h6>InitiatedOn</h6>
-						<input id="initiatedOn" required name="initiatedOn" class="form-control"  pInputText type="text" formControlName="initiatedOn" [ngClass]="{ 'is-invalid':!projectForm.get('initiatedOn')?.valid && projectForm.get('initiatedOn')?.touched}">
+						<input id="initiatedOn" required name="initiatedOn" class="form-control" placeholder="yyyy/mm/dd" pInputText type="text" formControlName="initiatedOn" [ngClass]="{ 'is-invalid':!projectForm.get('initiatedOn')?.valid && projectForm.get('initiatedOn')?.touched}">
 
 						<div class="invalid-feedback" *ngIf="!projectForm.get('initiatedOn')?.valid && projectForm.get('initiatedOn')?.touched">Please enter initatedOn</div>
+
+						<!-- <p-inputMask formControlName="initiatedOn" mask="99/99/9999" placeholder="99/99/9999" slotChar="mm/dd/yyyy"
+						[ngClass]="{ 'is-invalid': projectForm.get('initiatedOn')?.invalid && projectForm.get('initiatedOn')?.touched }" >
+		   				</p-inputMask>
+		 
+		   
+						<div *ngIf="projectForm.get('initiatedOn')?.hasError('required') && projectForm.get('initiatedOn')?.touched"
+								class="error-message">
+							Date is required.
+						</div> -->
 					</div> 
 					
                     <div class="flex gap-8">

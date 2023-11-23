@@ -7,6 +7,8 @@ import { LayoutComponent } from './layout/layout.component';
 import { TopbarComponent } from './topbar/topbar.component';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     CommonModule,
     RouterModule,
-    HttpClientModule
+    HttpClientModule,
+    OverlayPanelModule,
+    ButtonModule
   ]
 })
 export class LayoutModule { }

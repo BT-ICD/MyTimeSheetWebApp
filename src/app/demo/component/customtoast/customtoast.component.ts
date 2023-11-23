@@ -35,4 +35,14 @@ export class CustomtoastComponent {
   //   this.messageService.add({ severity: 'info', summary: 'Please select data you want to change'});
    
   // }
+
+  showUsernamePasswordToast()
+  {
+    this.messageService.add({ severity: 'error', summary: 'Username and Password is wrong'});
+  }
+
+  showUsernameFormatToast()
+  {
+    this.messageService.add({severity : 'error', summary : 'username format is wrong'});
+  }
 }

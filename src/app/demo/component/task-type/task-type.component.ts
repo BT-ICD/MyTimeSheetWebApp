@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { Itasktype } from 'src/app/demo/api/itasktype';
 import { TasktypeService } from 'src/app/demo/service/tasktype.service';
 import { CustomtoastComponent } from '../customtoast/customtoast.component';
+import { ProjectService } from '../../service/project.service';
 
 interface Column {
   field: string;
@@ -28,14 +29,14 @@ export class TaskTypeComponent implements OnInit {
   cols!: Column[];
   @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
   
-  constructor(private taskTypeService: TasktypeService, private fb : FormBuilder, private messageService: MessageService) { }
+  constructor(private taskTypeService: TasktypeService, private fb : FormBuilder, private messageService: MessageService, private projectService : ProjectService) { }
 
   ngOnInit() {
       this.taskTypeService.GetAllTaskType().subscribe(data => {
         this.taskTypeList = data;
         console.log(this.taskTypeList);
       })
-
+      
       this.taskTypeForm = this.fb.group({
         id : ['',[Validators.required]],
         typeShortName : ['', [Validators.required]],

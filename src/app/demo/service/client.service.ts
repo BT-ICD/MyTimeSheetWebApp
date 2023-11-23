@@ -48,12 +48,12 @@ export class ClientService {
     return throwError(()=>errorMessaage);
   }
 
-  getClientLookUp(): Observable<Iclient[]>
-  {
-    return this.http.get<Iclient[]>("https://localhost:7054/api/Client/GetClientLookup/lookup").pipe(
-      catchError(this.HandleError)
-    )
-  }
+  // getClientLookUp(): Observable<Iclient[]>
+  // {
+  //   return this.http.get<Iclient[]>("https://localhost:7054/api/Client/GetClientLookup/lookup").pipe(
+  //     catchError(this.HandleError)
+  //   )
+  // }
 
   GetClientById(id : number) : Observable<Iclient>
   {

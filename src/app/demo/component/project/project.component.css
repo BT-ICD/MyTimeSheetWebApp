@@ -2,3 +2,8 @@ p-sortIcon
   {
       margin-right: 93%;
   }
+ 
+
+.error-message {
+  color: red;
+}

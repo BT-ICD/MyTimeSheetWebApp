@@ -16,7 +16,6 @@ export class ProjectService {
 
   getAllProject() : Observable<Iproject[]>
   { 
-    debugger;
     if(this.projects)
     {
       return of(this.projects);
@@ -55,6 +54,7 @@ export class ProjectService {
   
   InsertProject(project : Iproject) : Observable<Iproject>
   {
+    debugger
     return this.http.post<Iproject>("https://localhost:7054/api/Project/InsertProject", project).pipe(
       tap(data => this.SaveData(data, true)),
       catchError(this.HandleError)
@@ -63,7 +63,7 @@ export class ProjectService {
 
   UpdateProject(project : Iproject) : Observable<Iproject>
   {
-    return this.http.put<Iproject>("", project).pipe(
+    return this.http.put<Iproject>("https://localhost:7054/api/Project/UpdateProject", project).pipe(
       tap(data => {this.SaveData(project)}),
       catchError(this.HandleError)
     );
@@ -86,7 +86,7 @@ export class ProjectService {
 
   DeleteProject(project : number) : Observable<Iproject>
   {
-    return this.http.delete<Iproject>(`/${project}`);
+    return this.http.delete<Iproject>(`https://localhost:7054/api/Project/Delete/${project}`);
 
   }
 }

@@ -21,7 +21,7 @@ interface Column {
   selector: 'app-team-memeber',
   templateUrl: './team-member.component.html',
   styleUrls: ['./team-member.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, DatePipe]
 })
 export class TeamMemberComponent implements OnInit{
 
@@ -36,7 +36,7 @@ export class TeamMemberComponent implements OnInit{
   mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   @ViewChild(CustomtoastComponent) customToast!: CustomtoastComponent;
 
-  constructor(private teamMemberService: TeamMemberService, private fb : FormBuilder, private messageService: MessageService, private designationService : DesignationService) { }
+  constructor(private teamMemberService: TeamMemberService, private fb : FormBuilder, private messageService: MessageService, private designationService : DesignationService ,private datePipe: DatePipe) { }
 
   ngOnInit() {
       this.teamMemberService.getAllTeamMember().subscribe(data => {
@@ -81,9 +81,9 @@ export class TeamMemberComponent implements OnInit{
       console.log(data);
       const dataofbirth = data.dob;
       const dateofjoin = data.doj;
-      const datePipe = new DatePipe('en-US');
-      const formattedDateBirth = datePipe.transform(new Date(dataofbirth), 'yyyy-MM-dd');
-      const formattedDateJoin = datePipe.transform(new Date(dateofjoin), 'yyyy-MM-dd');
+      //const datePipe = new DatePipe('en-US');
+      const formattedDateBirth = this.datePipe.transform(new Date(dataofbirth), 'yyyy-MM-dd');
+      const formattedDateJoin = this.datePipe.transform(new Date(dateofjoin), 'yyyy-MM-dd');
 
       // this.teamMemberForm.controls['teamMemberId'].setValue(data.teamMemberId);
       // this.teamMemberForm.controls['name'].setValue(data.name);
@@ -150,7 +150,13 @@ export class TeamMemberComponent implements OnInit{
     
     const formData = { ...this.teamMemberForm.value };
     const selectedDesignation = this.designationList.find(d => d.designationName == formData.designationName);
-     
+
+    const formattedDOB = this.datePipe.transform(formData.dob, 'yyyy-MM-dd');
+    formData.dob = formattedDOB;
+
+    const formattedDOJ = this.datePipe.transform(formData.doj, 'yyyy-MM-dd');
+    formData.doj = formattedDOJ;
+
     if (selectedDesignation) {
       formData.designationId = selectedDesignation.designationId; 
     }
