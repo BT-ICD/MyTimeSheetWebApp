@@ -79,12 +79,12 @@ export class ProjectComponent implements OnInit{
       // this.projectForm.controls['initiatedOn'].setValue(data.initiatedOn);
       // this.projectForm.controls['clientName'].setValue(data.clientName);
 
-      const formattedDateBirth = this.datePipe.transform(new Date(initiatedOn), 'yyyy-MM-dd');
+      //const formattedDateBirth = this.datePipe.transform(new Date(initiatedOn), 'yyyy-MM-dd');
 
       this.projectForm.setValue({
         projectId : data.projectId,
         name : data.name,
-        initiatedOn : formattedDateBirth,
+        initiatedOn : data.initiatedOn,
         clientName : data.clientName
       })
     });
@@ -131,8 +131,8 @@ export class ProjectComponent implements OnInit{
     const formData = { ...this.projectForm.value };
     const selectedClient = this.clientList.find(d => d.name == formData.clientName);
      
-    const formattedDate = this.datePipe.transform(formData.initiatedOn, 'yyyy-MM-dd');
-    formData.initiatedOn = formattedDate;
+    //const formattedDate = this.datePipe.transform(formData.initiatedOn, 'yyyy-MM-dd');
+    //formData.initiatedOn = formattedDate;
 
     if (selectedClient) {
       formData.clientId = selectedClient.clientId;

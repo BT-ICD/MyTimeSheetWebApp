@@ -3,7 +3,10 @@ p-sortIcon
       margin-right: 93%;
   }
  
-
-.error-message {
-  color: red;
+  .custom-invalid .p-inputtext {
+    border-color: red;
 }
+
+/* .error-message {
+  color: red;
+} */
