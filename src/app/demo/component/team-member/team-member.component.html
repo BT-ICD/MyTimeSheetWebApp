@@ -1,0 +1,300 @@
+<div class="grid">
+	<div class="col-12">
+		<app-customtoast></app-customtoast>
+	<p-panel header="Team Member List">
+		<ng-template pTemplate="icons">
+			<div class="flex btn">
+				<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"  (click)="openNew()" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editTeamMember(selectedTeamMember)" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteTeamMember(selectedTeamMember)" style="margin-right: 10px;"></button>
+			</div>
+		</ng-template>
+		<div class="card">
+			<p-table #myTable [value]="teamMemberList" 
+				[rows]="10" 
+				[rowHover]="true" 		
+				[paginator]="true" 
+				responsiveLayout="scroll"
+				[showCurrentPageReport]="true"
+				currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+				[globalFilterFields]="['teamMemberId','name', 'email', 'mobile','notes','alternateContact','dob','doj']"
+				dataKey="teamMemberId"
+				selectionMode="single" [(selection)]="selectedTeamMember"
+				[columns]="cols">
+
+				<ng-template pTemplate="caption">
+					<div class="flex flex-column md:flex-row md:align-items-center">
+
+						<button type="button" pButton pRipple icon="pi pi-file" (click)="myTable.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+
+						<button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+						
+						<span class="p-input-icon-left md:align-items-right">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text"  placeholder="Global Filter" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
+						</span>
+				</div>
+				</ng-template>
+				
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem" pSortableColumn="teamMemberId">
+							<div class="flex justify-content-between align-items-center">
+								Id
+								<p-sortIcon field="teamMemberId"></p-sortIcon>
+							</div>
+						</th>
+						<th style="min-width: 12rem" pSortableColumn="name">
+							<div class="flex justify-content-between align-items-center">
+								Name
+								<p-sortIcon field="name"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="email">
+							<div class="flex justify-content-between align-items-center">
+								Email
+								<p-sortIcon field="email"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="mobile">
+							<div class="flex justify-content-between align-items-center">
+								Contact No
+								<p-sortIcon field="mobile"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="alternateContact">
+							<div class="flex justify-content-between align-items-center">
+								AlternateContact
+								<p-sortIcon field="alternateContact"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="notes">
+							<div class="flex justify-content-between align-items-center">
+								Notes
+								<p-sortIcon field="notes"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="dob">
+							<div class="flex justify-content-between align-items-center">
+								Date of Birth
+								<p-sortIcon field="dob"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="doj">
+							<div class="flex justify-content-between align-items-center">
+								Date of Join
+								<p-sortIcon field="doj"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="designationName">
+							<div class="flex justify-content-between align-items-center">
+								Designation Name
+								<p-sortIcon field="designationName"></p-sortIcon>	
+							</div>
+						</th>	
+					</tr>
+					<tr>
+						<th>
+							<span class="p-input-icon-left"> 
+								<i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'teamMemberId','startsWith')"style="width: 10rem"/>
+							</span>
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'name', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'email', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'mobile', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'alternateContact', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'notes', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'dob', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'doj', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'designationName', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-teamMember>
+					<tr [pSelectableRow]="teamMember">
+						<td>
+							{{teamMember.teamMemberId}}
+						</td>
+						
+						<td>
+							{{teamMember.name }}
+						</td>
+						<td>
+							{{teamMember.email }}
+						</td>
+						<td>
+							{{teamMember.mobile }}
+						</td>
+						<td>
+							{{teamMember.alternateContact }}
+						</td>
+						<td>
+							{{teamMember.notes }}
+						</td>
+						<td>
+							{{teamMember.dob | date:'dd/MM/yyyy' }}
+						</td>
+						<td>
+							{{teamMember.doj | date:'dd/MM/yyyy' }}
+						</td>
+						<td>
+							{{teamMember.designationName }}
+						</td>
+						
+					</tr>
+				</ng-template>
+
+    		</p-table>	
+			<p-dialog [(visible)]="teamMemberDialog" [style]="{width: '450px'}" header="TeamMember Details" [modal]="true" class="p-fluid">
+
+				<form [formGroup]="teamMemberForm">
+
+					<div class="field">
+						<h6>Name</h6>
+						<input id="name" required name="name" class="form-control" pInputText type="text" formControlName="name" autofocus  [ngClass]="{ 'is-invalid':!teamMemberForm.get('name')?.valid && teamMemberForm.get('name')?.touched}">
+
+						<div class="invalid-feedback"  *ngIf="!teamMemberForm.get('name')?.valid && teamMemberForm.get('name')?.touched">Please enter name</div>
+
+					</div>
+
+                    <div class="field">
+						<h6>Email</h6>
+						<input id="email"  required name="email" class="form-control" pInputText type="text" formControlName="email" [ngClass]="{ 'is-invalid':!teamMemberForm.get('email')?.valid && teamMemberForm.get('email')?.touched}">
+
+						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('email')?.valid && teamMemberForm.get('email')?.touched">Please enter email</div>
+					</div>
+
+                    <div class="field">
+						<h6>Contact no</h6>
+						<input id="mobile" required name="mobile" class="form-control"  pInputText type="text" formControlName="mobile" [ngClass]="{ 'is-invalid':!teamMemberForm.get('mobile')?.valid && teamMemberForm.get('mobile')?.touched}">
+
+						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('mobile')?.valid && teamMemberForm.get('mobile')?.touched">Please enter contact no</div>
+					</div> 
+
+                    <div class="field">
+						<h6>Alternate contact</h6>
+						<input id="alternateContact" required name="alternateContact" class="form-control"  pInputText type="text" formControlName="alternateContact" [ngClass]="{ 'is-invalid':!teamMemberForm.get('alternateContact')?.valid && teamMemberForm.get('alternateContact')?.touched}">
+
+						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('alternateContact')?.valid && teamMemberForm.get('alternateContact')?.touched">Please enter alternate contact</div>
+					</div>
+
+                    <div class="field">
+						<h6>Notes</h6>
+						<input id="notes" required name="notes" class="form-control"  pInputText type="text" formControlName="notes" [ngClass]="{ 'is-invalid':!teamMemberForm.get('notes')?.valid && teamMemberForm.get('notes')?.touched}">
+
+						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('notes')?.valid && teamMemberForm.get('notes')?.touched">Please enter notes</div>
+					</div>
+
+                    <div class="field">
+						<h6>Date of birth</h6>
+						<!-- <input id="dob" required name="dob" class="form-control"  pInputText type="text" formControlName="dob" [ngClass]="{ 'is-invalid':!teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched}">
+
+						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched">Please enter date of birth</div> -->
+
+						<p-inputMask formControlName="dob" mask="9999-99-99" placeholder="yyyy-mm-dd" slotChar="yyyy-mm-dd"
+						[ngClass]="{
+							'is-invalid': !teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched,
+							'custom-invalid': !teamMemberForm.get('dob')?.valid && teamMemberForm.get('dob')?.touched
+						}">
+						</p-inputMask>
+				
+						<div *ngIf="teamMemberForm.get('dob')?.errors?.['required'] && teamMemberForm.get('dob')?.touched" class="invalid-feedback">
+							Please enter date of birth
+						</div>
+
+					</div>
+
+                    <div class="field">
+						<h6>Date of join</h6>
+						<!-- <input id="doj" required name="doj" class="form-control"  pInputText type="text" formControlName="doj" [ngClass]="{ 'is-invalid':!teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched}">
+
+						<div class="invalid-feedback" *ngIf="!teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched">Please enter date of join</div> -->
+
+						<p-inputMask formControlName="doj" mask="9999-99-99" placeholder="yyyy-mm-dd" slotChar="yyyy-mm-dd"
+						[ngClass]="{
+							'is-invalid': !teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched,
+							'custom-invalid': !teamMemberForm.get('doj')?.valid && teamMemberForm.get('doj')?.touched
+						}">
+						</p-inputMask>
+				
+						<div *ngIf="teamMemberForm.get('doj')?.errors?.['required'] && teamMemberForm.get('doj')?.touched" class="invalid-feedback">
+							Please enter date of join
+						</div>
+					</div>
+
+					<div class="field">
+						<h6>Designation name</h6>
+    					<p-dropdown  formControlName="designationName" [options]="designationNames"  appendTo="body" placeholder="Select a DesignationName" [showClear]="true"></p-dropdown>
+					</div>
+
+                    <div class="flex gap-8">
+                        <div class="ml-4">
+							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTeamMember()"></button>	
+                        </div>
+                        <div class="ml-4">
+                        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                        </div>
+                </div>
+                   
+				</form>
+			</p-dialog>
+			
+			<p-dialog [(visible)]="deleteTeamMemberDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+				<div class="flex align-items-center justify-content-center">
+					<i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+					<span *ngIf="selectedTeamMember">Are you sure you want to delete <b>{{selectedTeamMember.name}}</b>?</span>
+				</div>
+				<ng-template pTemplate="footer">
+
+					<button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteTeamMemberDialog = false" ></button>
+
+					<button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(selectedTeamMember)"></button>
+				</ng-template>
+			</p-dialog>
+		</div>
+		
+		</p-panel>
+
+	</div>
+</div>
+
+
+	
+
+
+
+
+

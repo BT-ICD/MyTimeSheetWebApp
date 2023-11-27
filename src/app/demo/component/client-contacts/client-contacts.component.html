@@ -1,0 +1,189 @@
+<div class="grid">
+	<div class="col-12">
+		<app-customtoast></app-customtoast>
+	<p-panel header="Contact List">
+		<ng-template pTemplate="icons">
+			<div class="flex btn">
+				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" style="margin-right: 10px;" (click)="editClientContact(selectedClientContact)"></button>
+
+				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"  style="margin-right: 10px;" (click)="deleteClientContact(selectedClientContact)" ></button>
+									 
+			</div>
+		</ng-template>
+		<div class="card">
+			<p-table #myTable [value]="clientContactList"
+				dataKey="contactId" 
+				[rows]="10" 
+				[rowHover]="true" 		
+				[paginator]="true" 
+				responsiveLayout="scroll"
+				[showCurrentPageReport]="true"
+				currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+				[globalFilterFields]="['contactId','name', 'email', 'mobile']"
+				selectionMode="single" [(selection)]="selectedClientContact"
+				>
+
+				<ng-template pTemplate="caption">
+					<div class="flex flex-column md:flex-row md:align-items-center">
+
+						<button type="button" pButton pRipple icon="pi pi-file" (click)="myTable.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+
+						<button type="button" pButton pRipple icon="pi pi-file-excel" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+
+						<span class="p-input-icon-left md:align-items-right">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text"  placeholder="Global Filter" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
+						</span>
+				</div>
+				</ng-template>
+				
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem" pSortableColumn="contactId">
+							<div class="flex justify-content-between align-items-center">
+								ContactId
+								<p-sortIcon field="contactId"></p-sortIcon>
+							</div>
+						</th>
+						<th style="min-width: 12rem" pSortableColumn="name">
+							<div class="flex justify-content-between align-items-center">
+								Name
+								<p-sortIcon field="name"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="email">
+							<div class="flex justify-content-between align-items-center">
+								Email
+								<p-sortIcon field="email"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="mobile">
+							<div class="flex justify-content-between align-items-center">
+								Contact No
+								<p-sortIcon field="mobile"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="designationName">
+							<div class="flex justify-content-between align-items-center">
+								Designation name
+								<p-sortIcon field="designationName"></p-sortIcon>	
+							</div>
+						</th>	
+					</tr>
+					<tr>
+						<th>
+							<span class="p-input-icon-left"> 
+								<i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'contactId','startsWith')"style="width: 10rem"/>
+							</span>
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'name', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'email', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'mobile', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'designationName', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						</tr>
+					
+				</ng-template>
+
+				<ng-template pTemplate="body" let-clientContacts>
+					<tr [pSelectableRow]="clientContacts">
+						<td>
+							{{clientContacts.contactId}}
+						</td>
+						
+						<td>
+							{{clientContacts.name}}
+						</td>
+						<td>
+							{{clientContacts.email }}
+						</td>
+						<td>
+							{{clientContacts.mobile }}
+						</td>
+						<td>
+							{{clientContacts.designationName}}
+						</td>
+						
+					</tr>
+				</ng-template>
+
+    		</p-table>	
+			<p-dialog [(visible)]="clientContactDialog" [style]="{width: '450px'}" header="Client Contact Details" [modal]="true" class="p-fluid">
+				<form [formGroup]="clientContactForm">
+					<div class="field">
+						<h6>Name</h6>
+						<input id="name" required name="name" class="form-control" pInputText type="text" formControlName="name" autofocus  [ngClass]="{ 'is-invalid':!clientContactForm.get('name')?.valid && clientContactForm.get('name')?.touched}">
+
+						<div class="invalid-feedback"  *ngIf="!clientContactForm.get('name')?.valid && clientContactForm.get('name')?.touched">Please enter name</div>
+					</div>
+                    <div class="field">
+						<h6>Email</h6>
+						<input id="email" required pInputText type="text" name="email" class="form-control" formControlName="email" [ngClass]="{ 'is-invalid':!clientContactForm.get('email')?.valid && clientContactForm.get('email')?.touched}">
+
+						<div class="invalid-feedback" *ngIf="!clientContactForm.get('email')?.valid && clientContactForm.get('email')?.touched">Please enter email</div>
+					</div>
+                    <div class="field">
+						<h6>Mobile</h6>
+						<input id="mobile" required class="form-control" name="mobile" pInputText type="text" formControlName="mobile" [ngClass]="{ 'is-invalid':!clientContactForm.get('mobile')?.valid && clientContactForm.get('mobile')?.touched}">
+
+						<div class="invalid-feedback"  *ngIf="!clientContactForm.get('mobile')?.valid && clientContactForm.get('mobile')?.touched">Please enter mobile no</div>
+					</div>
+
+                    <div class="field">
+						<h6>Designation name</h6>
+    					<p-dropdown  formControlName="designationName" [options]="designationNames"  appendTo="body" placeholder="Select a DesignationName" [showClear]="true"></p-dropdown>
+					</div>
+					
+
+                    <div class="flex gap-8">
+                        <div class="ml-4">
+							<button pButton pRipple label="Save" type="submit" icon="pi pi-check" class="p-button-text"  (click)="saveClient()"></button>	
+                        </div>
+						<div class="ml-4">
+							<button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+							</div>
+					</div>	
+				</form>
+
+			</p-dialog>	
+
+			<p-dialog [(visible)]="deleteClientContactDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+				<div class="flex align-items-center justify-content-center">
+					<i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+					<span *ngIf="selectedClientContact">Are you sure you want to delete <b>{{selectedClientContact.name}}</b>?</span>
+				</div>
+				<ng-template pTemplate="footer">
+					<button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteClientContactDialog = false"></button>
+					<button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(selectedClientContact)"></button>
+				</ng-template>
+			</p-dialog>
+		</div> 
+		
+
+		</p-panel>
+
+	</div>
+</div>
+
+
+	
+
+
+
+

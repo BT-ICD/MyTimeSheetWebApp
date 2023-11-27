@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Iclient } from '../api/iclient';
 import { BehaviorSubject, Observable, Subscription, catchError, of, tap, throwError } from 'rxjs';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,13 @@ export class ClientService {
     console.error('==>', errorMessaage);
     return throwError(()=>errorMessaage);
   }
+
+  // getClientLookUp(): Observable<Iclient[]>
+  // {
+  //   return this.http.get<Iclient[]>("https://localhost:7054/api/Client/GetClientLookup/lookup").pipe(
+  //     catchError(this.HandleError)
+  //   )
+  // }
 
   GetClientById(id : number) : Observable<Iclient>
   {

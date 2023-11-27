@@ -1,0 +1,187 @@
+<div class="grid">
+	<div class="col-12">
+		<app-customtoast></app-customtoast>
+	<p-panel header="Project List">
+		<ng-template pTemplate="icons">
+			<div class="flex btn">
+				<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"  (click)="openNew()" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editProject(selectedProject)" style="margin-right: 10px;"></button>
+				<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteProject(selectedProject)" style="margin-right: 10px;"></button>
+			</div>
+		</ng-template>
+		<div class="card">
+			<p-table #myTable [value]="projectList" 
+				[rows]="10" 
+				[rowHover]="true" 		
+				[paginator]="true" 
+				responsiveLayout="scroll"
+				[showCurrentPageReport]="true"
+				currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+				[globalFilterFields]="['projectId','name', 'cilentId', 'initiatedOn']"
+				dataKey="projectId"
+				selectionMode="single" [(selection)]="selectedProject"
+				[columns]="cols">
+
+				<ng-template pTemplate="caption">
+					<div class="flex flex-column md:flex-row md:align-items-center">
+
+						<button type="button" pButton pRipple icon="pi pi-file" (click)="myTable.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+
+						<button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+						
+						<span class="p-input-icon-left md:align-items-right">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text"  placeholder="Global Filter" (input)="myTable.filterGlobal($any($event.target).value, 'contains')" class="w-full"/>
+						</span>
+				</div>
+				</ng-template>
+				
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem" pSortableColumn="projectId">
+							<div class="flex justify-content-between align-items-center">
+								Id
+								<p-sortIcon field="projectId"></p-sortIcon>
+							</div>
+						</th>
+						<th style="min-width: 12rem" pSortableColumn="name">
+							<div class="flex justify-content-between align-items-center">
+								Name
+								<p-sortIcon field="name"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="clientName">
+							<div class="flex justify-content-between align-items-center">
+								Client Name
+								<p-sortIcon field="clientName"></p-sortIcon>	
+							</div>
+						</th>	
+						<th style="min-width: 12rem" pSortableColumn="initatedOn">
+							<div class="flex justify-content-between align-items-center">
+								InitatedOn
+								<p-sortIcon field="initatedOn"></p-sortIcon>	
+							</div>
+						</th>	
+						
+					</tr>
+					<tr>
+						<th>
+							<span class="p-input-icon-left"> 
+								<i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'projectId','startsWith')"style="width: 10rem"/>
+							</span>
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'name', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'clientName', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						<th>
+							<span class="p-input-icon-left"> <i class="pi pi-search"></i>
+								<input type="text" pInputText (input)="myTable.filter($any($event.target).value, 'initatedOn', 'startsWith')"style="width: 10rem"/>
+							</span>	
+						</th>
+						
+						</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-project>
+					<tr [pSelectableRow]="project">
+						<td>
+							{{project.projectId}}
+						</td>
+						
+						<td>
+							{{project.name }}
+						</td>
+						<td>
+							{{project.clientName }}
+						</td>
+						<td>
+							{{project.initiatedOn | date:'dd/MM/yyyy' }}
+						</td>
+						
+						
+					</tr>
+				</ng-template>
+
+    		</p-table>	
+			<p-dialog [(visible)]="projectDialog" [style]="{width: '450px'}" header="Project Details" [modal]="true" class="p-fluid">
+
+				<form [formGroup]="projectForm">
+
+					<div class="field">
+						<h6>Name</h6>
+						<input id="name" required name="name" class="form-control" pInputText type="text" formControlName="name" autofocus  [ngClass]="{ 'is-invalid':!projectForm.get('name')?.valid && projectForm.get('name')?.touched}">
+
+						<div class="invalid-feedback"  *ngIf="!projectForm.get('name')?.valid && projectForm.get('name')?.touched">Please enter name</div>
+
+					</div>
+
+					<div class="field">
+						<h6>Client name</h6>
+						<p-dropdown  formControlName="clientName" [options]="clientNames"  appendTo="body" placeholder="Select a clientName" [showClear]="true"></p-dropdown>
+					</div>
+
+                    <div class="field">
+						<h6>InitiatedOn</h6>
+						<input id="initiatedOn" required name="initiatedOn" class="form-control" placeholder="yyyy/mm/dd" pInputText type="text" formControlName="initiatedOn" [ngClass]="{ 'is-invalid':!projectForm.get('initiatedOn')?.valid && projectForm.get('initiatedOn')?.touched}">
+
+						<div class="invalid-feedback" *ngIf="!projectForm.get('initiatedOn')?.valid && projectForm.get('initiatedOn')?.touched">Please enter initatedOn</div>
+
+						<!-- <p-inputMask formControlName="initiatedOn" mask="99/99/9999" placeholder="99/99/9999" slotChar="mm/dd/yyyy"
+						[ngClass]="{ 'is-invalid': projectForm.get('initiatedOn')?.invalid && projectForm.get('initiatedOn')?.touched }" >
+		   				</p-inputMask>
+		 
+		   
+						<div *ngIf="projectForm.get('initiatedOn')?.hasError('required') && projectForm.get('initiatedOn')?.touched"
+								class="error-message">
+							Date is required.
+						</div> -->
+					</div> 
+					
+                    <div class="flex gap-8">
+                        <div class="ml-4">
+							<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProject()"></button>	
+                        </div>
+                        <div class="ml-4">
+                        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                        </div>
+					</div>
+               
+                   
+				</form>
+			</p-dialog>
+			
+			<p-dialog [(visible)]="deleteProjectDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+				<div class="flex align-items-center justify-content-center">
+					<i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+					<span *ngIf="selectedProject">Are you sure you want to delete <b>{{selectedProject.name}}</b>?</span>
+				</div>
+				<ng-template pTemplate="footer">
+
+					<button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProjectDialog = false" ></button>
+
+					<button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(selectedProject)"></button>
+				</ng-template>
+			</p-dialog>
+		</div>
+		
+		</p-panel>
+
+	</div>
+</div>
+
+
+	
+
+
+
+
+
+

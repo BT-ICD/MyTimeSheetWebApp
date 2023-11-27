@@ -1,0 +1,8 @@
+p-sortIcon
+  {
+      margin-right: 93%;
+  }
+
+  .custom-invalid .p-inputtext {
+    border-color: red;
+}
